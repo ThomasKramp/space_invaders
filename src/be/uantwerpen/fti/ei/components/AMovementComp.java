@@ -1,26 +1,40 @@
 package be.uantwerpen.fti.ei.components;
 
-public class AMovementComp {
-    float x, y, vx, vy;
+import be.uantwerpen.fti.ei.IntPtr;
 
-    public AMovementComp(int x, int y) {
-        this.x = x;
-        this.y = y;
+public class AMovementComp {
+    IntPtr x, y;
+    int vx, vy;
+
+    public AMovementComp(IntPtr x, IntPtr y) {
+        setX(x);    setY(y);
+        setVx(0);   setVy(0);
     }
 
-    public float getX() { return x; }
+    public IntPtr getX() { return x; }
 
-    public void setX(float x) { this.x = x; }
+    public void setX(IntPtr x) {
+        if (x.getValue() >= 0) this.x = x;
+        else this.x.setValue(0);
+    }
 
-    public float getY() { return y; }
+    public void setX(int x) {
+        this.x.setValue(Math.max(x, 0));
+    }
 
-    public void setY(float y) { this.y = y; }
+    public IntPtr getY() { return y; }
 
-    public float getVx() {  return vx; }
+    public void setY(IntPtr y) {
+        if (y.getValue() >= 0) this.y = y;
+        else this.y.setValue(0); }
 
-    public void setVx(float vx) { this.vx = vx; }
+    public void setY(int y) { this.x.setValue(Math.max(y, 0)); }
 
-    public float getVy() { return vy; }
+    public int getVx() {  return vx; }
 
-    public void setVy(float vy) { this.vy = vy; }
+    public void setVx(int vx) { this.vx = vx; }
+
+    public int getVy() { return vy; }
+
+    public void setVy(int vy) { this.vy = vy; }
 }

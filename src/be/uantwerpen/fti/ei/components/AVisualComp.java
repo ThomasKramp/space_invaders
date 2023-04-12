@@ -1,26 +1,36 @@
 package be.uantwerpen.fti.ei.components;
 
-public class AVisualComp {
-    int x, y, size;
+import be.uantwerpen.fti.ei.IntPtr;
 
-    public AVisualComp(int x, int y, int size) {
-        if (x >= 0) this.x = size;
-        else this.x = 0;
-        if (y >= 0) this.y = size;
-        else this.y = 0;
-        if (size >= 0) this.size = size;
-        else this.size = 0;
+public class AVisualComp {
+    IntPtr x, y;
+    int size;
+
+    public AVisualComp(IntPtr x, IntPtr y, int size) {
+        setX(x); setY(y);
+        setSize(size);
     }
 
-    public int getX() { return x; }
+    public int getX() { return x.getValue(); }
 
-    public void setX(int x) { this.x = x; }
+    public void setX(IntPtr x) {
+        if (x.getValue() >= 0) this.x = x;
+        else this.x.setValue(0);
+    }
 
-    public int getY() { return y; }
+    public void setX(int x) {
+        this.x.setValue(Math.max(x, 0));
+    }
 
-    public void setY(int y) { this.y = y; }
+    public int getY() { return y.getValue(); }
+
+    public void setY(IntPtr y) {
+        if (y.getValue() >= 0) this.y = y;
+        else this.y.setValue(0); }
+
+    public void setY(int y) { this.x.setValue(Math.max(y, 0)); }
 
     public int getSize() { return size; }
 
-    public void setSize(int size) { this.size = size; }
+    public void setSize(int size) { this.size = Math.max(size, 0); }
 }

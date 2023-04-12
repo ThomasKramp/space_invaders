@@ -2,6 +2,7 @@ package be.uantwerpen.fti.ei.interfaces;
 
 import be.uantwerpen.fti.ei.components.AVisualComp;
 import be.uantwerpen.fti.ei.entities.Entity;
+import be.uantwerpen.fti.ei.input.AInput;
 import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
 
 public interface IFactory {
@@ -23,6 +24,8 @@ public interface IFactory {
     Entity getPlayer(int x, int y);
 
     IVisualiseSystem getVisualiseSystem();
+
+    AInput getInput();
 
     /**
      * Getter for creating a ship

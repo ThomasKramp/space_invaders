@@ -3,6 +3,8 @@ package be.uantwerpen.fti.ei;
 import be.uantwerpen.fti.ei.components.AMovementComp;
 import be.uantwerpen.fti.ei.components.AVisualComp;
 import be.uantwerpen.fti.ei.entities.Entity;
+import be.uantwerpen.fti.ei.input.AInput;
+import be.uantwerpen.fti.ei.input.Inputs;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
 import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
 import be.uantwerpen.fti.ei.systems.MovementSystem;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class Game {
     private IFactory factory;
+    private AInput input;
     private boolean isRunning = true, isPaused = false;
     private int score = 0;
     private int screenWidth, screenHeight;
@@ -21,6 +24,7 @@ public class Game {
 
     public Game(IFactory fact, int width, int height) {
         this.factory = fact;
+        this.input = fact.getInput();
         screenWidth = width;
         screenHeight = height;
     }
@@ -46,7 +50,30 @@ public class Game {
         startTime = System.nanoTime();
         while (isRunning) {
             sleep(50);
+            //
+            if (input.inputAvailable()) {
+                Inputs direction = input.getInput();
+                if (direction == Inputs.SPACE)
+                    isPaused = ! isPaused;
+                else
+                    for (Entity entity: entities) {
+                        switch (direction) {
+                            case LEFT  -> { entity.movementComp.setVx(16 * -1); entity.movementComp.setVy(0); }
+                            case RIGHT -> { entity.movementComp.setVx(16 * 1); entity.movementComp.setVy(0); }
+                            case DOWN  -> { entity.movementComp.setVx(0); entity.movementComp.setVy(16 * 1); }
+                            case UP    -> { entity.movementComp.setVx(0); entity.movementComp.setVy(16 * -1); }
+                        }
+                    }
 
+            }
+
+            // Move
+            List<AMovementComp> moveList = entities.stream()
+                    .map(Entity::getMovementComp)
+                    .collect(Collectors.toList());
+            mover.update(moveList);
+
+            // Visualize
             List<AVisualComp> visualList = entities.stream()
                     .map(Entity::getVisualComp)
                     .collect(Collectors.toList());

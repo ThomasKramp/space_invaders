@@ -16,6 +16,7 @@ public class J2DVisualiseSystem implements IVisualiseSystem {
     @Override
     public void visualise(List<AVisualComp> components) {
         for (AVisualComp component: components) {
+            // System.out.println("X: " + component.getX() + ", Y: " + component.getY());
             J2DVisualComp j2dComp = (J2DVisualComp) component;
             j2dComp.draw();
         }
