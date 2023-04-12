@@ -22,6 +22,7 @@ public interface IFactory {
      * @return AShip (PlayerShip)
      */
     Entity getPlayer(int x, int y);
+    Entity getEnemy(int x, int y);
 
     IVisualiseSystem getVisualiseSystem();
 

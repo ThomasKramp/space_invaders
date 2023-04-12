@@ -1,6 +1,6 @@
 package be.uantwerpen.fti.ei.J2D.data_oriented;
 
-import be.uantwerpen.fti.ei.IntPtr;
+import be.uantwerpen.fti.ei.dataStruct.IntPtr;
 import be.uantwerpen.fti.ei.J2D.GraphicsContext;
 import be.uantwerpen.fti.ei.components.AVisualComp;
 

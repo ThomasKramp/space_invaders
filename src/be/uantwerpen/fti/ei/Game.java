@@ -1,6 +1,6 @@
 package be.uantwerpen.fti.ei;
 
-import be.uantwerpen.fti.ei.components.AMovementComp;
+import be.uantwerpen.fti.ei.components.MovementComp;
 import be.uantwerpen.fti.ei.components.AVisualComp;
 import be.uantwerpen.fti.ei.entities.Entity;
 import be.uantwerpen.fti.ei.input.AInput;
@@ -8,6 +8,7 @@ import be.uantwerpen.fti.ei.input.Inputs;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
 import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
 import be.uantwerpen.fti.ei.systems.MovementSystem;
+import be.uantwerpen.fti.ei.utilities.CollisionDetector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,11 +42,14 @@ public class Game {
 
     public void Start() {
 
-        List<Entity> entities = new ArrayList<>();
-        entities.add(factory.getPlayer(25, 25));
+        Entity player = factory.getPlayer(25, 25);
+
+        List<Entity> enemies = new ArrayList<>();
+        enemies.add(factory.getEnemy(128, 128));
 
         MovementSystem mover = new MovementSystem();
         IVisualiseSystem visualiser = factory.getVisualiseSystem();
+        CollisionDetector colDet = new CollisionDetector(screenWidth, screenHeight);
 
         startTime = System.nanoTime();
         while (isRunning) {
@@ -56,27 +60,36 @@ public class Game {
                 if (direction == Inputs.SPACE)
                     isPaused = ! isPaused;
                 else
-                    for (Entity entity: entities) {
-                        switch (direction) {
-                            case LEFT  -> { entity.movementComp.setVx(16 * -1); entity.movementComp.setVy(0); }
-                            case RIGHT -> { entity.movementComp.setVx(16 * 1); entity.movementComp.setVy(0); }
-                            case DOWN  -> { entity.movementComp.setVx(0); entity.movementComp.setVy(16 * 1); }
-                            case UP    -> { entity.movementComp.setVx(0); entity.movementComp.setVy(16 * -1); }
-                        }
+                    switch (direction) {
+                        case LEFT  -> { player.movementComp.setVx(-1 * player.movementComp.getMovement()); player.movementComp.setVy(0); }
+                        case RIGHT -> { player.movementComp.setVx(1 * player.movementComp.getMovement()); player.movementComp.setVy(0); }
+                        case DOWN  -> { player.movementComp.setVx(0); player.movementComp.setVy(1 * player.movementComp.getMovement()); }
+                        case UP    -> { player.movementComp.setVx(0); player.movementComp.setVy(-1 * player.movementComp.getMovement()); }
                     }
 
             }
 
-            // Move
-            List<AMovementComp> moveList = entities.stream()
+            // Collision detection
+            List<MovementComp> colDetList = enemies.stream()
                     .map(Entity::getMovementComp)
                     .collect(Collectors.toList());
+            colDetList.add(player.movementComp);
+            for (MovementComp moveComp: colDetList) {
+                colDet.checkWalls(moveComp);
+            }
+
+            // Move
+            List<MovementComp> moveList = enemies.stream()
+                    .map(Entity::getMovementComp)
+                    .collect(Collectors.toList());
+            moveList.add(player.movementComp);
             mover.update(moveList);
 
             // Visualize
-            List<AVisualComp> visualList = entities.stream()
+            List<AVisualComp> visualList = enemies.stream()
                     .map(Entity::getVisualComp)
                     .collect(Collectors.toList());
+            visualList.add(player.visualComp);
             visualiser.visualise(visualList);
 
             endTime = System.nanoTime();

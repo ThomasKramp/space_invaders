@@ -1,4 +1,4 @@
-package be.uantwerpen.fti.ei;
+package be.uantwerpen.fti.ei.dataStruct;
 
 public class IntPtr {
     /**

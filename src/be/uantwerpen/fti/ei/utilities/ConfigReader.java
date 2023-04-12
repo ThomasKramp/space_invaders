@@ -1,4 +1,4 @@
-package be.uantwerpen.fti.ei;
+package be.uantwerpen.fti.ei.utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class ConfigReader {
-    int width, height;
+    public int width, height;
 
     // https://www.geeksforgeeks.org/different-ways-reading-text-file-java/
     public void readFile() throws IOException {

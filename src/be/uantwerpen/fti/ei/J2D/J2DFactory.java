@@ -1,10 +1,10 @@
 package be.uantwerpen.fti.ei.J2D;
 
-import be.uantwerpen.fti.ei.IntPtr;
+import be.uantwerpen.fti.ei.dataStruct.IntPtr;
 import be.uantwerpen.fti.ei.J2D.data_oriented.J2DVisualComp;
 import be.uantwerpen.fti.ei.J2D.data_oriented.J2DVisualiseSystem;
 import be.uantwerpen.fti.ei.entities.Entity;
-import be.uantwerpen.fti.ei.components.AMovementComp;
+import be.uantwerpen.fti.ei.components.MovementComp;
 import be.uantwerpen.fti.ei.input.AInput;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
 import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
@@ -19,9 +19,21 @@ public class J2DFactory implements IFactory {
     public Entity getPlayer(int x, int y) {
         IntPtr xPtr = new IntPtr(x);
         IntPtr yPtr = new IntPtr(y);
+        int size = 32;
         return new Entity(
-                new AMovementComp(xPtr, yPtr),
-                new J2DVisualComp(xPtr, yPtr, 16, 128, 64, 32, grCtx)
+                new MovementComp(xPtr, yPtr, 16, size),
+                new J2DVisualComp(xPtr, yPtr, size, 128, 64, 32, grCtx)
+        );
+    }
+
+    @Override
+    public Entity getEnemy(int x, int y) {
+        IntPtr xPtr = new IntPtr(x);
+        IntPtr yPtr = new IntPtr(y);
+        int size = 16;
+        return new Entity(
+                new MovementComp(xPtr, yPtr, 8, size),
+                new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, grCtx)
         );
     }
 

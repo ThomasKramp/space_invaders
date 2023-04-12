@@ -1,18 +1,18 @@
 package be.uantwerpen.fti.ei.entities;
 
-import be.uantwerpen.fti.ei.components.AMovementComp;
+import be.uantwerpen.fti.ei.components.MovementComp;
 import be.uantwerpen.fti.ei.components.AVisualComp;
 
 public class Entity {
-    public AMovementComp movementComp;
+    public MovementComp movementComp;
     public AVisualComp visualComp;
 
-    public Entity(AMovementComp movementComp, AVisualComp visualComp) {
+    public Entity(MovementComp movementComp, AVisualComp visualComp) {
         this.movementComp = movementComp;
         this.visualComp = visualComp;
     }
 
-    public AMovementComp getMovementComp() {
+    public MovementComp getMovementComp() {
         return movementComp;
     }
 
