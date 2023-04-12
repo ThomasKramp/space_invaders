@@ -5,6 +5,7 @@ import be.uantwerpen.fti.ei.J2D.data_oriented.J2DVisualComp;
 import be.uantwerpen.fti.ei.J2D.data_oriented.J2DVisualiseSystem;
 import be.uantwerpen.fti.ei.entities.Entity;
 import be.uantwerpen.fti.ei.components.MovementComp;
+import be.uantwerpen.fti.ei.entities.EntityType;
 import be.uantwerpen.fti.ei.input.AInput;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
 import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
@@ -20,9 +21,20 @@ public class J2DFactory implements IFactory {
         IntPtr xPtr = new IntPtr(x);
         IntPtr yPtr = new IntPtr(y);
         int size = 32;
-        return new Entity(
+        return new Entity(EntityType.PLAYER,
                 new MovementComp(xPtr, yPtr, 16, size),
                 new J2DVisualComp(xPtr, yPtr, size, 128, 64, 32, grCtx)
+        );
+    }
+
+    @Override
+    public Entity getSmallEnemy(int x, int y) {
+        IntPtr xPtr = new IntPtr(x);
+        IntPtr yPtr = new IntPtr(y);
+        int size = 16;
+        return new Entity(EntityType.ENEMY,
+                new MovementComp(xPtr, yPtr, 8, size),
+                new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, grCtx)
         );
     }
 
@@ -30,8 +42,19 @@ public class J2DFactory implements IFactory {
     public Entity getEnemy(int x, int y) {
         IntPtr xPtr = new IntPtr(x);
         IntPtr yPtr = new IntPtr(y);
-        int size = 16;
-        return new Entity(
+        int size = 32;
+        return new Entity(EntityType.ENEMY,
+                new MovementComp(xPtr, yPtr, 8, size),
+                new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, grCtx)
+        );
+    }
+
+    @Override
+    public Entity getBigEnemy(int x, int y) {
+        IntPtr xPtr = new IntPtr(x);
+        IntPtr yPtr = new IntPtr(y);
+        int size = 64;
+        return new Entity(EntityType.ENEMY,
                 new MovementComp(xPtr, yPtr, 8, size),
                 new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, grCtx)
         );

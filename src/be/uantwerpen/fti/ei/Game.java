@@ -42,10 +42,24 @@ public class Game {
 
     public void Start() {
 
-        Entity player = factory.getPlayer(25, 25);
+        Entity player = factory.getPlayer(240, 400);
 
         List<Entity> enemies = new ArrayList<>();
-        enemies.add(factory.getEnemy(128, 128));
+        int randX, randY;
+        while (enemies.size() < 1) {
+            randX = (int)(Math.random() * (512 - 16 - 64));
+            randY = (int)(Math.random() * 256) + 64;
+            enemies.add(factory.getSmallEnemy(randX, randY));
+
+            randX = (int)(Math.random() * (512 - 16 - 64));
+            randY = (int)(Math.random() * 256) + 64;
+            enemies.add(factory.getEnemy(randX, randY));
+            //enemies.add(factory.getEnemy(0, 0));
+
+            randX = (int)(Math.random() * (512 - 16 - 64));
+            randY = (int)(Math.random() * 256) + 64;
+            enemies.add(factory.getBigEnemy(randX, randY));
+        }
 
         MovementSystem mover = new MovementSystem();
         IVisualiseSystem visualiser = factory.getVisualiseSystem();
@@ -66,23 +80,24 @@ public class Game {
                         case DOWN  -> { player.movementComp.setVx(0); player.movementComp.setVy(1 * player.movementComp.getMovement()); }
                         case UP    -> { player.movementComp.setVx(0); player.movementComp.setVy(-1 * player.movementComp.getMovement()); }
                     }
-
             }
 
-            // Collision detection
+            //
             List<MovementComp> colDetList = enemies.stream()
                     .map(Entity::getMovementComp)
                     .collect(Collectors.toList());
             colDetList.add(player.movementComp);
-            for (MovementComp moveComp: colDetList) {
-                colDet.checkWalls(moveComp);
-            }
 
-            // Move
+            // Move + Collision detection
             List<MovementComp> moveList = enemies.stream()
                     .map(Entity::getMovementComp)
                     .collect(Collectors.toList());
             moveList.add(player.movementComp);
+            for (MovementComp moveComp: colDetList) {
+                colDet.checkWalls(moveComp);
+                //colDet.checkEntities(moveComp, colDetList);
+            }
+            colDet.checkEntities(player.getMovementComp(), colDetList);
             mover.update(moveList);
 
             // Visualize
@@ -95,7 +110,8 @@ public class Game {
             endTime = System.nanoTime();
             duration = (endTime - startTime);
             startTime = endTime;
-            sleep(50 - duration / 1000000);
+            // sleep(50 - duration / 1000000);
+            sleep(500 - duration / 1000000);
         }
     }
 }

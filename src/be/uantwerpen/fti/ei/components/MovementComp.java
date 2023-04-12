@@ -14,6 +14,7 @@ public class MovementComp {
     }
 
     public IntPtr getX() { return x; }
+    public int getXVal() { return x.getValue(); }
     public void setX(IntPtr x) {
         if (x.getValue() >= 0) this.x = x;
         else this.x.setValue(0);
@@ -23,6 +24,7 @@ public class MovementComp {
     }
 
     public IntPtr getY() { return y; }
+    public int getYVal() { return y.getValue(); }
     public void setY(IntPtr y) {
         if (y.getValue() >= 0) this.y = y;
         else this.y.setValue(0); }
