@@ -22,4 +22,7 @@ public class J2DVisualiseSystem implements IVisualiseSystem {
         }
         grCtx.render();
     }
+
+    @Override
+    public void end() { grCtx.close(); }
 }

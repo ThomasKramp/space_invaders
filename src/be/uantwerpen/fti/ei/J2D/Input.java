@@ -22,6 +22,7 @@ public class Input extends AInput {
                 case KeyEvent.VK_DOWN   -> keyInputs.add(Inputs.DOWN);
                 case KeyEvent.VK_UP     -> keyInputs.add(Inputs.UP);
                 case KeyEvent.VK_SPACE  -> keyInputs.add(Inputs.SPACE);
+                case KeyEvent.VK_ESCAPE -> keyInputs.add(Inputs.ESCAPE);
             }
         }
     }

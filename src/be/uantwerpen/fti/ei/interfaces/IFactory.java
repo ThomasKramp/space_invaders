@@ -22,6 +22,8 @@ public interface IFactory {
      * @return AShip (PlayerShip)
      */
     Entity getPlayer(int x, int y);
+    Entity getPBullet(int x, int y);
+
     Entity getSmallEnemy(int x, int y);
     Entity getEnemy(int x, int y);
     Entity getBigEnemy(int x, int y);

@@ -1,6 +1,7 @@
 package be.uantwerpen.fti.ei.utilities;
 
-import be.uantwerpen.fti.ei.components.MovementComp;
+import be.uantwerpen.fti.ei.components.AMovementComp;
+import be.uantwerpen.fti.ei.components.Movement.EnemyMoveComp;
 
 import java.util.List;
 
@@ -10,34 +11,34 @@ public class CollisionDetector {
         this.width = width;
         this.height = height;
     }
-    public void checkWalls(MovementComp comp) {
+    public void checkWalls(AMovementComp comp) {
         // Check if x is within borders
-        if (comp.getXVal() + comp.getVx() <= 0) {
-            comp.setVx(-comp.getXVal());
-        } else if (comp.getXVal() + comp.getSize() + comp.getVx() >= width) {
-            comp.setVx(width - (comp.getXVal() + comp.getSize()));
+        if (comp.getX() + comp.getVx() <= 0) {
+            comp.setVx(-comp.getX());
+        } else if (comp.getX() + comp.getSize() + comp.getVx() >= width) {
+            comp.setVx(width - (comp.getX() + comp.getSize()));
         }
 
         // Check if y is within borders
-        if (comp.getYVal() + comp.getVy() <= 0) {
-            comp.setVy(-comp.getYVal());
-        } else if (comp.getYVal() + comp.getSize() + comp.getVy() >= height) {
-            comp.setVy(height - (comp.getYVal() + comp.getSize()));
+        if (comp.getY() + comp.getVy() <= 0) {
+            comp.setVy(-comp.getY());
+        } else if (comp.getY() + comp.getSize() + comp.getVy() >= height) {
+            comp.setVy(height - (comp.getY() + comp.getSize()));
         }
     }
 
-    public void checkEntities(MovementComp comp, List<MovementComp> entities) {
+    public void checkEntities(AMovementComp comp, List<AMovementComp> entities) {
         int leftDiff, rightDiff, upperDiff, downDiff;
-        boolean b1, b2, b3, b4;
+        boolean b1, b2, b3, b4, b5;
         // System.out.println("X: ");
-        for (MovementComp entity: entities) {
+        for (AMovementComp entity: entities) {
             if (comp != entity) {
-                leftDiff = entity.getXVal() - (comp.getXVal() + comp.getSize());
-                rightDiff = comp.getXVal() - (entity.getXVal() + entity.getSize());
+                leftDiff = entity.getX() - (comp.getX() + comp.getSize());
+                rightDiff = comp.getX() - (entity.getX() + entity.getSize());
                 //System.out.print("Left: " + leftDiff + ", Right: " + rightDiff + "\t");
 
-                upperDiff = entity.getYVal() - (comp.getYVal() + comp.getSize());
-                downDiff = comp.getYVal() - (entity.getYVal() + entity.getSize());
+                upperDiff = entity.getY() - (comp.getY() + comp.getSize());
+                downDiff = comp.getY() - (entity.getY() + entity.getSize());
                 //System.out.println("Upper: " + upperDiff + ", Down: " + downDiff);
 
                 // Horizontal align
@@ -51,12 +52,13 @@ public class CollisionDetector {
                 //if (leftDiff >= 0 || rightDiff >= 0) System.out.println("Upper: " + upperDiff + ", Down: " + downDiff);*/
 
                 if (comp.getVy() != 0) {
-                    b1 = entity.getXVal() < comp.getXVal() && comp.getXVal() < entity.getXVal() + entity.getSize();
-                    b2 = entity.getXVal() < comp.getXVal() + comp.getSize() && comp.getXVal() + comp.getSize() < entity.getXVal() + entity.getSize();
-                    b3 = comp.getXVal() < entity.getXVal() && entity.getXVal() < comp.getXVal() + comp.getSize();
-                    b4 = comp.getXVal() < entity.getXVal() + entity.getSize() && entity.getXVal() + entity.getSize() < comp.getXVal() + comp.getSize();
-                    if (b1 || b2 || b3 || b4) {
-                        System.out.println("Vertical True");
+                    b1 = entity.getX() < comp.getX() && comp.getX() < entity.getX() + entity.getSize();
+                    b2 = entity.getX() < comp.getX() + comp.getSize() && comp.getX() + comp.getSize() < entity.getX() + entity.getSize();
+                    b3 = comp.getX() < entity.getX() && entity.getX() < comp.getX() + comp.getSize();
+                    b4 = comp.getX() < entity.getX() + entity.getSize() && entity.getX() + entity.getSize() < comp.getX() + comp.getSize();
+                    b5 = entity.getX() == comp.getX() && entity.getX() + entity.getSize() == comp.getX() + comp.getSize();
+                    if (b1 || b2 || b3 || b4 || b5) {
+                        // System.out.println("Vertical True");
                         // Upper collision
                         if ((upperDiff >= 0) && !(downDiff >= 0))
                             if (Math.abs(upperDiff) < Math.abs(comp.getMovement()))
@@ -67,12 +69,13 @@ public class CollisionDetector {
                                 if (comp.getVy() < 0) comp.setVy(-downDiff);
                     }
                 } else if (comp.getVx() != 0) {
-                    b1 = entity.getYVal() < comp.getYVal() && comp.getYVal() < entity.getYVal() + entity.getSize();
-                    b2 = entity.getYVal() < comp.getYVal() + comp.getSize() && comp.getYVal() + comp.getSize() < entity.getYVal() + entity.getSize();
-                    b3 = comp.getYVal() <= entity.getYVal() && entity.getYVal() <= comp.getYVal() + comp.getSize();
-                    b4 = comp.getYVal() <= entity.getYVal() + entity.getSize() && entity.getYVal() + entity.getSize() <= comp.getYVal() + comp.getSize();
-                    if (b1 || b2 || b3 || b4) {
-                        System.out.println("Horizontal True");
+                    b1 = entity.getY() < comp.getY() && comp.getY() < entity.getY() + entity.getSize();
+                    b2 = entity.getY() < comp.getY() + comp.getSize() && comp.getY() + comp.getSize() < entity.getY() + entity.getSize();
+                    b3 = comp.getY() < entity.getY() && entity.getY() < comp.getY() + comp.getSize();
+                    b4 = comp.getY() < entity.getY() + entity.getSize() && entity.getY() + entity.getSize() < comp.getY() + comp.getSize();
+                    b5 = entity.getY() == comp.getY() && entity.getY() + entity.getSize() == comp.getY() + comp.getSize();
+                    if (b1 || b2 || b3 || b4 || b5) {
+                        // System.out.println("Horizontal True");
                         // Left collision
                         if ((leftDiff >= 0) && !(rightDiff >= 0))
                             if (Math.abs(leftDiff) < Math.abs(comp.getMovement()))

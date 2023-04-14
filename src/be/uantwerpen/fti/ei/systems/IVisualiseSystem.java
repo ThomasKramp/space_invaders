@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IVisualiseSystem {
     void visualise(List<AVisualComp> components);
+    void end();
 }

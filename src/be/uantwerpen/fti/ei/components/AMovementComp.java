@@ -2,19 +2,19 @@ package be.uantwerpen.fti.ei.components;
 
 import be.uantwerpen.fti.ei.dataStruct.IntPtr;
 
-public class MovementComp {
-    IntPtr x, y;
-    int vx, vy, movement, size;
+public abstract class AMovementComp {
+    protected IntPtr x, y;
+    protected int vx, vy, movement, size;
 
-    public MovementComp(IntPtr x, IntPtr y, int weight, int size) {
+    public AMovementComp(IntPtr x, IntPtr y, int weight, int size) {
         setX(x);    setY(y);
         setVx(0);   setVy(0);
         setMovement(weight);
         setSize(size);
     }
 
-    public IntPtr getX() { return x; }
-    public int getXVal() { return x.getValue(); }
+    public IntPtr getXPtr() { return x; }
+    public int getX() { return x.getValue(); }
     public void setX(IntPtr x) {
         if (x.getValue() >= 0) this.x = x;
         else this.x.setValue(0);
@@ -23,14 +23,14 @@ public class MovementComp {
         this.x.setValue(Math.max(x, 0));
     }
 
-    public IntPtr getY() { return y; }
-    public int getYVal() { return y.getValue(); }
+    public IntPtr getYPtr() { return y; }
+    public int getY() { return y.getValue(); }
     public void setY(IntPtr y) {
         if (y.getValue() >= 0) this.y = y;
         else this.y.setValue(0); }
     public void setY(int y) { this.x.setValue(Math.max(y, 0)); }
 
-    public int getVx() {  return vx; }
+    public int getVx() { return vx; }
     public void setVx(int vx) { this.vx = vx; }
 
     public int getVy() { return vy; }

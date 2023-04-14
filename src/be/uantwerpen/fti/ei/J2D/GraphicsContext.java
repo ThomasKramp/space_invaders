@@ -47,6 +47,7 @@ public class GraphicsContext {
     }
 
     public void render() { panel.repaint(); }
+    public void close() { frame.dispose();; }
 
     private void doDrawing(Graphics g) {
         Graphics2D graph2d = (Graphics2D) g;

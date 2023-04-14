@@ -1,10 +1,10 @@
 package be.uantwerpen.fti.ei.dataStruct;
 
+/**
+ * Deze klasse is gemaakt om een integer waarde als pointer op te kunnen slagen
+ * @author      Thomas Kramp
+ */
 public class IntPtr {
-    /**
-     * Deze klasse is gemaakt om een integer waarde als pointer op te kunnen slagen
-     * @author      Thomas Kramp
-     */
     private int value;
 
     public IntPtr() {}
