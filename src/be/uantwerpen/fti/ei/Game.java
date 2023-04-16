@@ -1,9 +1,6 @@
 package be.uantwerpen.fti.ei;
 
-import be.uantwerpen.fti.ei.components.AMovementComp;
-import be.uantwerpen.fti.ei.components.AVisualComp;
-import be.uantwerpen.fti.ei.components.Movement.EnemyMoveComp;
-import be.uantwerpen.fti.ei.components.Movement.PBulletMoveComp;
+import be.uantwerpen.fti.ei.components.*;
 import be.uantwerpen.fti.ei.entities.Entity;
 import be.uantwerpen.fti.ei.input.AInput;
 import be.uantwerpen.fti.ei.input.Inputs;
@@ -77,35 +74,38 @@ public class Game {
                     isRunning = false;
                 else if (direction == Inputs.SPACE) {
                     int x = player.getMovementComp().getX();
-                    x += player.getMovementComp().getSize() / 2;
+                    x += player.getColDetComp().getSize() / 2;
                     int y = player.getMovementComp().getY();
                     entities.add(factory.getPBullet(x, y));
                 } else
                     switch (direction) {
-                        case LEFT  -> { player.getMovementComp().setVx(-player.getMovementComp().getMovement()); player.getMovementComp().setVy(0); }
-                        case RIGHT -> { player.getMovementComp().setVx(player.getMovementComp().getMovement()); player.getMovementComp().setVy(0); }
-                        case DOWN  -> { player.getMovementComp().setVx(0); player.getMovementComp().setVy(player.getMovementComp().getMovement()); }
-                        case UP    -> { player.getMovementComp().setVx(0); player.getMovementComp().setVy(-player.getMovementComp().getMovement()); }
+                        case LEFT  -> { player.getMovementComp().setVx(-player.getColDetComp().getMovement()); player.getMovementComp().setVy(0); }
+                        case RIGHT -> { player.getMovementComp().setVx(player.getColDetComp().getMovement()); player.getMovementComp().setVy(0); }
+                        case DOWN  -> { player.getMovementComp().setVx(0); player.getMovementComp().setVy(player.getColDetComp().getMovement()); }
+                        case UP    -> { player.getMovementComp().setVx(0); player.getMovementComp().setVy(-player.getColDetComp().getMovement()); }
                     }
             }
 
-            //
-            List<AMovementComp> colDetList = entities.stream()
-                    .map(Entity::getMovementComp)
-                    .collect(Collectors.toList());
-            colDetList.add(player.getMovementComp());
 
-            // Move + Collision detection
-            List<AMovementComp> moveList = entities.stream()
+            for (Entity entity: entities)
+                EditEntityBehaviour(entity.getMovementComp(), entity.getColDetComp().getMovement());
+
+            // Collision detection
+            List<ColDetComp> colDetList = entities.stream()
+                    .map(Entity::getColDetComp)
+                    .collect(Collectors.toList());
+            colDetList.add(player.getColDetComp());
+            for (ColDetComp colDetComp: colDetList) {
+                colDet.checkWalls(colDetComp);
+                colDet.checkEntities(colDetComp, colDetList);
+            }
+            //colDet.checkEntities(player.getMovementComp(), colDetList);
+
+            // Move
+            List<MovementComp> moveList = entities.stream()
                     .map(Entity::getMovementComp)
                     .collect(Collectors.toList());
             moveList.add(player.getMovementComp());
-            for (AMovementComp moveComp: colDetList) {
-                EditEntityBehaviour(moveComp);
-                colDet.checkWalls(moveComp);
-                colDet.checkEntities(moveComp, colDetList);
-            }
-            //colDet.checkEntities(player.getMovementComp(), colDetList);
             mover.update(moveList);
 
             // Visualize
@@ -124,22 +124,22 @@ public class Game {
         visualiser.end();
     }
 
-    public void EditEntityBehaviour(AMovementComp moveComp){
-        if (moveComp instanceof EnemyMoveComp EComp) {
-            int counter = EComp.getCounter();
+    public void EditEntityBehaviour(MovementComp moveComp, int standardMovement){
+        if (moveComp instanceof SmartMoveComp SComp) {
+            int counter = SComp.getCounter();
 
             if (counter == 128) {
                 counter = 0;
             } else if ((counter + 1) % 32 == 0) {
-                moveComp.setVy(moveComp.getMovement());
-                EComp.setDirection(-EComp.getDirection());
+                moveComp.setVy(standardMovement);
+                SComp.setDirection(-SComp.getDirection());
             } else if ((counter + 1) % 4 == 0) {
-                moveComp.setVx(moveComp.getMovement() * EComp.getDirection());
+                moveComp.setVx(standardMovement * SComp.getDirection());
             }
 
-            EComp.setCounter(counter + 1);
-        } else if (moveComp instanceof PBulletMoveComp) {
-            moveComp.setVy(moveComp.getMovement());
+            SComp.setCounter(counter + 1);
+        } else {
+            moveComp.setVy(standardMovement);
         }
     }
 }

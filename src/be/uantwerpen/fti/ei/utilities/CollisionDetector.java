@@ -1,7 +1,6 @@
 package be.uantwerpen.fti.ei.utilities;
 
-import be.uantwerpen.fti.ei.components.AMovementComp;
-import be.uantwerpen.fti.ei.components.Movement.EnemyMoveComp;
+import be.uantwerpen.fti.ei.components.ColDetComp;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ public class CollisionDetector {
         this.width = width;
         this.height = height;
     }
-    public void checkWalls(AMovementComp comp) {
+    public void checkWalls(ColDetComp comp) {
         // Check if x is within borders
         if (comp.getX() + comp.getVx() <= 0) {
             comp.setVx(-comp.getX());
@@ -27,11 +26,11 @@ public class CollisionDetector {
         }
     }
 
-    public void checkEntities(AMovementComp comp, List<AMovementComp> entities) {
+    public void checkEntities(ColDetComp comp, List<ColDetComp> entities) {
         int leftDiff, rightDiff, upperDiff, downDiff;
         boolean b1, b2, b3, b4, b5;
         // System.out.println("X: ");
-        for (AMovementComp entity: entities) {
+        for (ColDetComp entity: entities) {
             if (comp != entity) {
                 leftDiff = entity.getX() - (comp.getX() + comp.getSize());
                 rightDiff = comp.getX() - (entity.getX() + entity.getSize());

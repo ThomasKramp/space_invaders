@@ -1,13 +1,13 @@
-package be.uantwerpen.fti.ei.components.Movement;
+package be.uantwerpen.fti.ei.components;
 
-import be.uantwerpen.fti.ei.components.AMovementComp;
+import be.uantwerpen.fti.ei.components.MovementComp;
 import be.uantwerpen.fti.ei.dataStruct.IntPtr;
 
-public class EnemyMoveComp extends AMovementComp {
+public class SmartMoveComp extends MovementComp {
     int counter;
     int direction;
-    public EnemyMoveComp(IntPtr x, IntPtr y, int weight, int size) {
-        super(x, y, weight, size);
+    public SmartMoveComp(IntPtr x, IntPtr y, IntPtr Vx, IntPtr Vy) {
+        super(x, y, Vx, Vy);
         setCounter(0);
         setDirection(1);
     }
