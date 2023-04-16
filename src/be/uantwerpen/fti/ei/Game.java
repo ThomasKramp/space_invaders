@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Game {
-    private IFactory factory;
-    private AInput input;
+    private final IFactory factory;
+    private final AInput input;
     private boolean isRunning = true, isPaused = false;
     private int score = 0;
-    private int screenWidth, screenHeight;
+    private final int screenWidth, screenHeight;
     long startTime, endTime, duration;
 
     public Game(IFactory fact, int width, int height) {
@@ -93,17 +93,14 @@ public class Game {
                     .map(Entity::getColDetComp)
                     .collect(Collectors.toList());
             colDetList.add(player.getColDetComp());
-            for (ColDetComp colDetComp: colDetList) {
-                colDet.checkWalls(colDetComp);
-                colDet.checkEntities(colDetComp, colDetList);
-            }
+            colDet.checkEntities(colDetList);
 
             // Life
             List<LifeComp> lifeList = entities.stream()
                     .map(Entity::getLifeComp)
                     .collect(Collectors.toList());
             lifeList.add(player.getLifeComp());
-            life.update(lifeList);
+            life.checkLives(lifeList);
 
             // Filter death entities
             entities = entities.stream()
@@ -128,7 +125,6 @@ public class Game {
             endTime = System.nanoTime();
             duration = (endTime - startTime);
             startTime = endTime;
-            // sleep(50 - duration / 1000000);
             sleep(50 - duration / 1000000);
         }
         visualiser.end();

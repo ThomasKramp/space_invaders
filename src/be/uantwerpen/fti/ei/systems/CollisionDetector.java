@@ -1,6 +1,7 @@
 package be.uantwerpen.fti.ei.systems;
 
 import be.uantwerpen.fti.ei.components.ColDetComp;
+import be.uantwerpen.fti.ei.entities.EntityType;
 
 import java.util.List;
 
@@ -10,7 +11,15 @@ public class CollisionDetector {
         this.width = width;
         this.height = height;
     }
-    public void checkWalls(ColDetComp comp) {
+
+    public void checkEntities(List<ColDetComp> components) {
+        for (ColDetComp colDetComp: components) {
+            checkWalls(colDetComp);
+            checkCollisions(colDetComp, components);
+        }
+    }
+
+    private void checkWalls(ColDetComp comp) {
         // Check if x is within borders
         if (comp.getX() + comp.getVx() <= 0) {
             comp.setVx(-comp.getX());
@@ -27,13 +36,14 @@ public class CollisionDetector {
 
         // Check if top or bottom of screen is hit
         if (comp.getY() == 0 || comp.getY() + comp.getVy() == height) {
-            comp.setHit(true);
+            comp.setDead(true);
         }
     }
 
-    public void checkEntities(ColDetComp comp, List<ColDetComp> entities) {
+    private void checkCollisions(ColDetComp comp, List<ColDetComp> entities) {
         int leftDiff, rightDiff, upperDiff, downDiff;
         boolean b1, b2, b3, b4, b5;
+
         // System.out.println("X: ");
         for (ColDetComp entity: entities) {
             if (comp != entity) {
@@ -65,12 +75,18 @@ public class CollisionDetector {
                         // System.out.println("Vertical True");
                         // Upper collision
                         if ((upperDiff >= 0) && !(downDiff >= 0))
-                            if (Math.abs(upperDiff) < Math.abs(comp.getMovement()))
-                                if (comp.getVy() > 0) comp.setVy(upperDiff);
+                            if (Math.abs(upperDiff) < Math.abs(comp.getMovement())) // if remaining space < movement
+                                if (comp.getVy() > 0) {                             // set remaining space as speed
+                                    if (!checkHits(comp, entity))       // check for bullet hit
+                                        comp.setVy(upperDiff);          // else change speed
+                                }
                         // Down collision
                         if (!(upperDiff >= 0) && (downDiff >= 0))
                             if (Math.abs(downDiff) < Math.abs(comp.getMovement()))
-                                if (comp.getVy() < 0) comp.setVy(-downDiff);
+                                if (comp.getVy() < 0) {
+                                    if (!checkHits(comp, entity))
+                                        comp.setVy(-downDiff);
+                                }
                     }
                 } else if (comp.getVx() != 0) {
                     b1 = entity.getY() < comp.getY() && comp.getY() < entity.getY() + entity.getSize();
@@ -83,18 +99,35 @@ public class CollisionDetector {
                         // Left collision
                         if ((leftDiff >= 0) && !(rightDiff >= 0))
                             if (Math.abs(leftDiff) < Math.abs(comp.getMovement()))
-                                if (comp.getVx() > 0) comp.setVx(leftDiff);
+                                if (comp.getVx() > 0) {
+                                    if (!checkHits(comp, entity))
+                                        comp.setVx(leftDiff);
+                                }
                         // Right collision
                         if (!(leftDiff >= 0) && (rightDiff >= 0))
                             if (Math.abs(rightDiff) < Math.abs(comp.getMovement()))
-                                if (comp.getVx() < 0) comp.setVx(-rightDiff);
+                                if (comp.getVx() < 0) {
+                                    if (!checkHits(comp, entity))
+                                        comp.setVx(-rightDiff);
+                                }
                     }
                 }
-
-                // Only change the movement if it is smaller and not 0
-                // if (Math.abs(movementX) < Math.abs(comp.getMovement()) && movementX != 0) comp.setMovement(movementX);
-                //if (collides(comp, entity)) {  comp.setMovement(0); }
             }
         }
+    }
+
+    // Entity is the bullet & comp is the player, enemy, bonus, ...
+    private boolean checkHits(ColDetComp comp, ColDetComp entity) {
+        boolean bullet1, bullet2;
+        // Players can shoot enemies and bonuses
+        bullet1 = entity.getType() == EntityType.P_BULLET && (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.BONUS);
+        // Enemies can shoot players and walls
+        bullet2 = entity.getType() == EntityType.E_BULLET && (comp.getType() == EntityType.PLAYER || comp.getType() == EntityType.WALL);
+        if (bullet1 || bullet2) {
+            comp.setHit(true);
+            entity.setHit(true);
+            return true;
+        }
+        return false;
     }
 }
