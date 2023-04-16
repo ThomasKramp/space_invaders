@@ -12,10 +12,15 @@ public class LifeSystem {
             if (component.isDead()) lives = 0;
             else if (component.isHit()) {
                 lives = lives - 1;
-                component.setHit(false);
+                // component.setHit(false);
             }
             component.setLives(lives);
         }
         components.removeIf(component -> component.getLives() <= 0);
+    }
+
+    // Needed for visualisation
+    public void resetHits(List<LifeComp> components) {
+        for (LifeComp component: components) component.setHit(false);
     }
 }

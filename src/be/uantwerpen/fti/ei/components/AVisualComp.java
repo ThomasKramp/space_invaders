@@ -1,5 +1,6 @@
 package be.uantwerpen.fti.ei.components;
 
+import be.uantwerpen.fti.ei.dataStruct.BoolPtr;
 import be.uantwerpen.fti.ei.dataStruct.IntPtr;
 
 public class AVisualComp {

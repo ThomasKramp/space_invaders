@@ -27,6 +27,7 @@ public interface IFactory {
     Entity getSmallEnemy(int x, int y);
     Entity getEnemy(int x, int y);
     Entity getBigEnemy(int x, int y);
+    Entity getEBullet(int x, int y);
 
     IVisualiseSystem getVisualiseSystem();
 

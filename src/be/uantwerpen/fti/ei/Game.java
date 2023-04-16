@@ -2,6 +2,7 @@ package be.uantwerpen.fti.ei;
 
 import be.uantwerpen.fti.ei.components.*;
 import be.uantwerpen.fti.ei.entities.Entity;
+import be.uantwerpen.fti.ei.entities.EntityType;
 import be.uantwerpen.fti.ei.input.AInput;
 import be.uantwerpen.fti.ei.input.Inputs;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
@@ -10,6 +11,7 @@ import be.uantwerpen.fti.ei.systems.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 public class Game {
@@ -85,8 +87,25 @@ public class Game {
                     }
             }
 
+            // TODO: Voeg toe aan methode
             for (Entity entity: entities)
                 EditEntityBehaviour(entity.getMovementComp(), entity.getColDetComp().getMovement());
+
+            // TODO zet in eigen methode
+            // https://www.benchresources.net/java-how-to-add-remove-modify-an-element-to-list-while-iterating/
+            // Can add new item with list iterator
+            ListIterator<Entity> iterator = entities.listIterator();
+            while(iterator.hasNext()) {
+                Entity entity = iterator.next();
+                if (entity.getColDetComp().getType() == EntityType.ENEMY)
+                    if (entity.getMovementComp() instanceof SmartMoveComp SComp)
+                        if (SComp.getCounter() % 64 == 0) {
+                            int x = SComp.getX();
+                            x += entity.getColDetComp().getSize() / 2;
+                            int y = SComp.getY() + entity.getColDetComp().getSize();
+                            iterator.add(factory.getEBullet(x, y));
+                        }
+            }
 
             // Collision detection
             List<ColDetComp> colDetList = entities.stream()
@@ -121,6 +140,10 @@ public class Game {
                     .collect(Collectors.toList());
             visualList.add(player.getVisualComp());
             visualiser.visualise(visualList);
+
+            life.resetHits(lifeList);
+
+            // if (player.getLifeComp().getLives() <= 0) isRunning = false;
 
             endTime = System.nanoTime();
             duration = (endTime - startTime);

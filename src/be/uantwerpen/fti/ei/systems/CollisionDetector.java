@@ -116,13 +116,14 @@ public class CollisionDetector {
         }
     }
 
-    // Entity is the bullet & comp is the player, enemy, bonus, ...
     private boolean checkHits(ColDetComp comp, ColDetComp entity) {
         boolean bullet1, bullet2;
         // Players can shoot enemies and bonuses
-        bullet1 = entity.getType() == EntityType.P_BULLET && (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.BONUS);
+        bullet1 = comp.getType() == EntityType.P_BULLET && (entity.getType() == EntityType.ENEMY || entity.getType() == EntityType.BONUS || entity.getType() == EntityType.E_BULLET)
+                || entity.getType() == EntityType.P_BULLET && (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.BONUS || comp.getType() == EntityType.E_BULLET);
         // Enemies can shoot players and walls
-        bullet2 = entity.getType() == EntityType.E_BULLET && (comp.getType() == EntityType.PLAYER || comp.getType() == EntityType.WALL);
+        bullet2 = comp.getType() == EntityType.E_BULLET && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.WALL || entity.getType() == EntityType.P_BULLET)
+                || entity.getType() == EntityType.E_BULLET && (comp.getType() == EntityType.PLAYER || comp.getType() == EntityType.WALL || comp.getType() == EntityType.P_BULLET);
         if (bullet1 || bullet2) {
             comp.setHit(true);
             entity.setHit(true);

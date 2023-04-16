@@ -28,7 +28,7 @@ public class J2DFactory implements IFactory {
                 new MovementComp(xPtr, yPtr, vxPtr, vyPtr),
                 new ColDetComp(xPtr, yPtr, vxPtr, vyPtr, 16, size, isHit, isDead, EntityType.PLAYER),
                 new LifeComp(5, isHit, isDead),
-                new J2DVisualComp(xPtr, yPtr, size, 128, 64, 32, grCtx)
+                new J2DVisualComp(xPtr, yPtr, size, 128, 64, 32, isHit, grCtx)
         );
     }
 
@@ -42,7 +42,7 @@ public class J2DFactory implements IFactory {
                 new MovementComp(xPtr, yPtr, vxPtr, vyPtr),
                 new ColDetComp(xPtr, yPtr, vxPtr, vyPtr, -4, size, isHit, isDead, EntityType.P_BULLET),
                 new LifeComp(1, isHit, isDead),
-                new J2DVisualComp(xPtr, yPtr, size, 128, 64, 32, grCtx)
+                new J2DVisualComp(xPtr, yPtr, size, 128, 64, 32, isHit, grCtx)
         );
     }
 
@@ -56,7 +56,7 @@ public class J2DFactory implements IFactory {
                 new SmartMoveComp(xPtr, yPtr, vxPtr, vyPtr),
                 new ColDetComp(xPtr, yPtr, vxPtr, vyPtr, 8, size, isHit, isDead, EntityType.ENEMY),
                 new LifeComp(1, isHit, isDead),
-                new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, grCtx)
+                new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, isHit, grCtx)
         );
     }
 
@@ -70,7 +70,7 @@ public class J2DFactory implements IFactory {
                 new SmartMoveComp(xPtr, yPtr, vxPtr, vyPtr),
                 new ColDetComp(xPtr, yPtr, vxPtr, vyPtr, 16, size, isHit, isDead, EntityType.ENEMY),
                 new LifeComp(3, isHit, isDead),
-                new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, grCtx)
+                new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, isHit, grCtx)
         );
     }
 
@@ -84,7 +84,21 @@ public class J2DFactory implements IFactory {
                 new SmartMoveComp(xPtr, yPtr, vxPtr, vyPtr),
                 new ColDetComp(xPtr, yPtr, vxPtr, vyPtr, 32, size, isHit, isDead, EntityType.ENEMY),
                 new LifeComp(5, isHit, isDead),
-                new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, grCtx)
+                new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, isHit, grCtx)
+        );
+    }
+
+    @Override
+    public Entity getEBullet(int x, int y) {
+        IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
+        IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
+        BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        int size = 4;
+        return new Entity(
+                new MovementComp(xPtr, yPtr, vxPtr, vyPtr),
+                new ColDetComp(xPtr, yPtr, vxPtr, vyPtr, 4, size, isHit, isDead, EntityType.E_BULLET),
+                new LifeComp(1, isHit, isDead),
+                new J2DVisualComp(xPtr, yPtr, size, 32, 64, 128, isHit, grCtx)
         );
     }
 
