@@ -2,7 +2,7 @@ package be.uantwerpen.fti.ei;
 
 import be.uantwerpen.fti.ei.J2D.J2DFactory;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
-import be.uantwerpen.fti.ei.utilities.ConfigReader;
+import be.uantwerpen.fti.ei.config.ConfigReader;
 
 import java.io.*;
 

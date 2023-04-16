@@ -1,4 +1,4 @@
-package be.uantwerpen.fti.ei.utilities;
+package be.uantwerpen.fti.ei.config;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,7 +13,7 @@ public class ConfigReader {
     public void readFile() throws IOException {
         String cwd = Path.of("").toAbsolutePath().toString();
         System.out.println(cwd + "\\config.txt");
-        File file = new File(cwd + "\\src\\be\\uantwerpen\\fti\\ei\\config.txt");
+        File file = new File(cwd + "\\src\\be\\uantwerpen\\fti\\ei\\config\\config.txt");
         BufferedReader br = new BufferedReader(new FileReader(file));
         String config;
         while ((config = br.readLine()) != null) {

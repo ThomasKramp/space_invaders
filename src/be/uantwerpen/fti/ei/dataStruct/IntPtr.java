@@ -7,7 +7,7 @@ package be.uantwerpen.fti.ei.dataStruct;
 public class IntPtr {
     private int value;
 
-    public IntPtr() {}
+    public IntPtr() { setValue(0); }
     public IntPtr(int value) {
         setValue(value);
     }

@@ -3,9 +3,9 @@ package be.uantwerpen.fti.ei.dataStruct;
 public class BoolPtr {
     boolean value;
 
-    public BoolPtr() {}
+    public BoolPtr() { setValue(false); }
     public BoolPtr(boolean value) {
-        this.value = value;
+        setValue(value);
     }
 
     public boolean isValue() {

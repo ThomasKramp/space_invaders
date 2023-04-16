@@ -1,4 +1,4 @@
-package be.uantwerpen.fti.ei.utilities;
+package be.uantwerpen.fti.ei.systems;
 
 import be.uantwerpen.fti.ei.components.ColDetComp;
 
@@ -23,6 +23,11 @@ public class CollisionDetector {
             comp.setVy(-comp.getY());
         } else if (comp.getY() + comp.getSize() + comp.getVy() >= height) {
             comp.setVy(height - (comp.getY() + comp.getSize()));
+        }
+
+        // Check if top or bottom of screen is hit
+        if (comp.getY() == 0 || comp.getY() + comp.getVy() == height) {
+            comp.setHit(true);
         }
     }
 

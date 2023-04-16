@@ -1,16 +1,19 @@
 package be.uantwerpen.fti.ei.components;
 
+import be.uantwerpen.fti.ei.dataStruct.BoolPtr;
 import be.uantwerpen.fti.ei.dataStruct.IntPtr;
 
 public class ColDetComp {
     IntPtr x, y, vx, vy;
     int standardMovement, size;
+    BoolPtr isHit;
 
-    public ColDetComp(IntPtr x, IntPtr y, IntPtr Vx, IntPtr Vy, int movement, int size) {
+    public ColDetComp(IntPtr x, IntPtr y, IntPtr Vx, IntPtr Vy, int movement, int size, BoolPtr isHit) {
         setX(x);    setY(y);
         setVx(Vx);   setVy(Vy);
         setMovement(movement);
         setSize(size);
+        setHit(isHit);
     }
 
     public IntPtr getXPtr() { return x; }
@@ -44,4 +47,9 @@ public class ColDetComp {
 
     public int getSize() { return size; }
     public void setSize(int size) { this.size = size; }
+
+    public BoolPtr isHitPtr() { return isHit; }
+    public boolean isHit() { return isHit.isValue(); }
+    public void setHit(BoolPtr isHit) { this.isHit = isHit; }
+    public void setHit(boolean isHit) { this.isHit.setValue(isHit); }
 }

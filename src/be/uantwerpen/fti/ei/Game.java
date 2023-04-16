@@ -5,9 +5,7 @@ import be.uantwerpen.fti.ei.entities.Entity;
 import be.uantwerpen.fti.ei.input.AInput;
 import be.uantwerpen.fti.ei.input.Inputs;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
-import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
-import be.uantwerpen.fti.ei.systems.MovementSystem;
-import be.uantwerpen.fti.ei.utilities.CollisionDetector;
+import be.uantwerpen.fti.ei.systems.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,8 +59,9 @@ public class Game {
         }
 
         MovementSystem mover = new MovementSystem();
-        IVisualiseSystem visualiser = factory.getVisualiseSystem();
         CollisionDetector colDet = new CollisionDetector(screenWidth, screenHeight);
+        LifeSystem life = new LifeSystem();
+        IVisualiseSystem visualiser = factory.getVisualiseSystem();
 
         startTime = System.nanoTime();
         while (isRunning) {
@@ -86,7 +85,6 @@ public class Game {
                     }
             }
 
-
             for (Entity entity: entities)
                 EditEntityBehaviour(entity.getMovementComp(), entity.getColDetComp().getMovement());
 
@@ -99,7 +97,19 @@ public class Game {
                 colDet.checkWalls(colDetComp);
                 colDet.checkEntities(colDetComp, colDetList);
             }
-            //colDet.checkEntities(player.getMovementComp(), colDetList);
+
+            // Life
+            List<LifeComp> lifeList = entities.stream()
+                    .map(Entity::getLifeComp)
+                    .collect(Collectors.toList());
+            lifeList.add(player.getLifeComp());
+            life.update(lifeList);
+
+            // Filter death entities
+            entities = entities.stream()
+                    .filter(entity -> lifeList.stream()
+                            .anyMatch(lifecomp -> lifecomp.equals(entity.getLifeComp())))
+                    .collect(Collectors.toList());
 
             // Move
             List<MovementComp> moveList = entities.stream()
