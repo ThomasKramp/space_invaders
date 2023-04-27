@@ -2,7 +2,7 @@ package be.uantwerpen.fti.ei;
 
 import be.uantwerpen.fti.ei.entities.EntityType;
 import be.uantwerpen.fti.ei.interfaces.IHotBar;
-import be.uantwerpen.fti.ei.systems.CollisionDetector;
+import be.uantwerpen.fti.ei.systems.CollisionDetector1D;
 import be.uantwerpen.fti.ei.components.*;
 import be.uantwerpen.fti.ei.entities.Entity;
 import be.uantwerpen.fti.ei.input.AInput;
@@ -63,10 +63,14 @@ public class Game {
         entities.add(factory.getWall(screenWidth * 2 / 3, screenHeight * 4 / 6));
 
         MovementSystem mover = new MovementSystem();
-        CollisionDetector colDet = new CollisionDetector(screenWidth, screenHeight);
+        CollisionDetector1D colDet = new CollisionDetector1D(screenWidth, screenHeight);
         LifeSystem life = new LifeSystem();
         IVisualiseSystem visualiser = factory.getVisualiseSystem();
         IHotBar hotBarHandler = factory.getHotBarHandler();
+
+        // Variables
+        int randomShooter = 0;          // Random for enemy shooting (Entity creation)
+        boolean enemyAdvance = false;   // Boolean for enemy advancement ()
 
         startTime = System.nanoTime();
         while (isRunning) {
@@ -74,6 +78,7 @@ public class Game {
 
             /*--------------------------------------------------------------------------------------------------------*/
             // Input handling
+
             if (input.inputAvailable()) {
                 Inputs direction = input.getInput();
                 if (direction == Inputs.ESCAPE)
@@ -93,6 +98,7 @@ public class Game {
 
             /*--------------------------------------------------------------------------------------------------------*/
             // List initialization
+
             // Move
             List<MovementComp> moveList = entities.stream()
                     .map(Entity::getMovementComp)
@@ -107,23 +113,33 @@ public class Game {
                     .collect(Collectors.toList());
 
             /*--------------------------------------------------------------------------------------------------------*/
-            // Entity movement
+            // Entity creation
+
+            randomShooter = (int) (Math.random() * 255);
             for (MovementComp moveComp: moveList) {
-                // Add new entities
-                if (moveComp.getType() == EntityType.ENEMY)
-                    if (moveComp instanceof SmartMoveComp SComp)
-                        if (SComp.getCounter() % 16 == 3) {
-                            int x = SComp.getX();
-                            int y = SComp.getY() + 1;
-                            entities.add(factory.getEBullet(x, y));
-                        }
+                // Add new entities (enemy shoots at random)
+                if (moveComp.getType() == EntityType.ENEMY) {
+                    if (randomShooter % 37 == 8) {
+                        int x = moveComp.getX();
+                        int y = moveComp.getY() + 1;
+                        entities.add(factory.getEBullet(x, y));
+                    }
+                }
+            }
 
-                // Edit entity behaviour
-                EditEntityBehaviour(moveComp);
+            /*--------------------------------------------------------------------------------------------------------*/
+            // Entity collision detection
 
+            for (MovementComp moveComp: moveList) {
                 // Collision detection (walls)
                 if (colDet.checkVerticalWallCollisions(moveComp)) {
+                    // All entities should stop if they hit the walls
                     moveComp.setVx(0);
+                    // Enemy entities should advance if one hits the walls
+                    if (moveComp.getType() == EntityType.ENEMY) {
+                        enemyAdvance = true;
+                        moveList.forEach(enemy -> { if (enemy.getType() == EntityType.ENEMY) enemy.setVx(0); });
+                    }
                 }
                 if (colDet.checkHorizontalWallCollisions(moveComp)) {
                     moveComp.setVy(0);
@@ -149,16 +165,38 @@ public class Game {
                         }
                 }
             }
-            // Move
+            /*--------------------------------------------------------------------------------------------------------*/
+            // Entity movement
+
             mover.update(moveList);
+            for (MovementComp moveComp: moveList) {
+                // Enemy movement
+                if (moveComp.getType() == EntityType.ENEMY) {
+                    if (enemyAdvance) {
+                        assert moveComp instanceof SmartMoveComp;
+                        SmartMoveComp SComp = (SmartMoveComp) moveComp;
+                        SComp.setVx(0); SComp.setVy(1);
+                        SComp.setDirection(-SComp.getDirection());
+                    }
+                }
+                // Bullet movement
+                else if (moveComp.getType() == EntityType.P_BULLET) moveComp.setVy(-1);
+                else if (moveComp.getType() == EntityType.E_BULLET) moveComp.setVy(1);
+
+                // Enemy & Boss movement
+                if (moveComp instanceof SmartMoveComp SComp) {
+                    if ((SComp.getCounter() + 1) % 4 == 0) {
+                        moveComp.setVx(SComp.getDirection());
+                    }
+                    SComp.setCounter((byte) (SComp.getCounter() + 1));
+                }
+            }
+            enemyAdvance = false;
 
             /*--------------------------------------------------------------------------------------------------------*/
             // Entity filtering (based on lives)
 
-            if (player.getLifeComp().isHit())
-                isPaused = isPaused;
             life.checkLives(lifeList);
-
             for (LifeComp lifeComp: lifeList) {
                 // Filter death entities
                 if (lifeComp.isDead()) {
@@ -197,26 +235,9 @@ public class Game {
         visualiser.end();
     }
 
-    public void EditEntityBehaviour(MovementComp moveComp){
-        if (moveComp instanceof SmartMoveComp SComp) {
-            byte counter = SComp.getCounter();
-            if ((counter + 1) % 32 == 0) {
-                moveComp.setVy(1);
-                SComp.setDirection(-SComp.getDirection());
-            } else if ((counter + 1) % 4 == 0) {
-                moveComp.setVx(SComp.getDirection());
-            }
-            SComp.setCounter((byte) (counter + 1));
-        } else {
-            if (moveComp.getType() == EntityType.P_BULLET)      moveComp.setVy(-1);
-            else if (moveComp.getType() == EntityType.E_BULLET) moveComp.setVy(1);
-        }
-    }
-
-
     public boolean checkHits(LifeComp comp, LifeComp entity) {
         boolean bullet1, bullet2;
-        // Players can shoot enemies and bonuses
+        // Players can shoot enemies, bosses and bonuses
         bullet1 =  comp.getType() == EntityType.P_BULLET && (entity.getType() == EntityType.ENEMY || entity.getType() == EntityType.BONUS || entity.getType() == EntityType.E_BULLET)
                 || entity.getType() == EntityType.P_BULLET && (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.BONUS || comp.getType() == EntityType.E_BULLET);
         // Enemies can shoot players and walls
@@ -227,8 +248,25 @@ public class Game {
             entity.setHit(true);
             return true;
         }
+
+        // Enemies blow up with direct contact to players and walls
+        if (comp.getType() == EntityType.ENEMY && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.WALL)) {
+            comp.setDead(true);
+            entity.setHit(true);
+            return true;
+        }
+
+        // Bosses destroy players and walls with direct contact
+        if (comp.getType() == EntityType.BOSS && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.WALL)) {
+            comp.setDead(true);
+            entity.setDead(true);
+            return true;
+        }
+
+        // Player type entities can't shoot players, walls or player bullets
         bullet1 =  (comp.getType() == EntityType.PLAYER || comp.getType() == EntityType.WALL || comp.getType() == EntityType.P_BULLET)
                 && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.WALL || entity.getType() == EntityType.P_BULLET);
+        // Enemy type entities can't shoot enemies, bosses, bonuses or enemy bullets
         bullet2 =  (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.BONUS || comp.getType() == EntityType.E_BULLET)
                 && (entity.getType() == EntityType.ENEMY || entity.getType() == EntityType.BONUS || entity.getType() == EntityType.E_BULLET);
         return bullet1 || bullet2;

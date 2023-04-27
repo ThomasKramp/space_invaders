@@ -26,8 +26,8 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getPlayer(int x, int y) {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
-        IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
-        BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        IntPtr vxPtr = new IntPtr(0), vyPtr = new IntPtr(0);
+        BoolPtr isHit = new BoolPtr(false), isDead = new BoolPtr(false);
         EntityType type = EntityType.PLAYER;
         int size = 1; IntPtr scale = new IntPtr(grCtx.getScale());
         int[] rgb = {192, 96, 64};
@@ -41,8 +41,8 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getPBullet(int x, int y) {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
-        IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
-        BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        IntPtr vxPtr = new IntPtr(0), vyPtr = new IntPtr(0);
+        BoolPtr isHit = new BoolPtr(false), isDead = new BoolPtr(false);
         EntityType type = EntityType.P_BULLET;
         int size = 1; IntPtr scale = new IntPtr(grCtx.getScale()/4);
         int[] rgb = {192, 96, 64};
@@ -56,8 +56,8 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getWall(int x, int y) {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
-        IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
-        BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        IntPtr vxPtr = new IntPtr(0), vyPtr = new IntPtr(0);
+        BoolPtr isHit = new BoolPtr(false), isDead = new BoolPtr(false);
         EntityType type = EntityType.WALL;
         int size = 1; IntPtr scale = new IntPtr(grCtx.getScale());
         int[] rgb = {128, 64, 32};
@@ -71,8 +71,8 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getEnemy(int x, int y) {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
-        IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
-        BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        IntPtr vxPtr = new IntPtr(0), vyPtr = new IntPtr(0);
+        BoolPtr isHit = new BoolPtr(false), isDead = new BoolPtr(false);
         EntityType type = EntityType.ENEMY;
         int size = 1; IntPtr scale = new IntPtr(grCtx.getScale());
         int[] rgb = {48, 96, 192};
@@ -86,8 +86,8 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getBossEnemy(int x, int y) {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
-        IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
-        BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        IntPtr vxPtr = new IntPtr(0), vyPtr = new IntPtr(0);
+        BoolPtr isHit = new BoolPtr(false), isDead = new BoolPtr(false);
         EntityType type = EntityType.BOSS;
         int size = 2; IntPtr scale = new IntPtr(grCtx.getScale());
         int[] rgb = {48, 96, 192};
@@ -101,8 +101,8 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getEBullet(int x, int y) {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
-        IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
-        BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        IntPtr vxPtr = new IntPtr(0), vyPtr = new IntPtr(0);
+        BoolPtr isHit = new BoolPtr(false), isDead = new BoolPtr(false);
         EntityType type = EntityType.E_BULLET;
         int size = 1; IntPtr scale = new IntPtr(grCtx.getScale()/4);
         int[] rgb = {48, 96, 192};

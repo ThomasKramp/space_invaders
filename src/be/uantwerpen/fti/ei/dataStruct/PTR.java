@@ -1,21 +1,14 @@
 package be.uantwerpen.fti.ei.dataStruct;
 
-/**
- * Deze klasse is gemaakt om een integer waarde als pointer op te kunnen slagen
- * @author      Thomas Kramp
- */
-public class IntPtr {
-    private int value;
-    PTR<Integer>
-
-    public IntPtr(int value) {
+public class PTR<T> {
+    private T value;
+    public PTR(T value) {
         setValue(value);
     }
-
-    public int getValue() {
+    public T getValue() {
         return value;
     }
-    public void setValue(int value) {
+    public void setValue(T value) {
         this.value = value;
     }
 
@@ -30,5 +23,6 @@ public class IntPtr {
      * @since       Specifies version introduced
      * @throws      Same as @exception
      * @version     States current version
+     * @see         reference
      */
 }

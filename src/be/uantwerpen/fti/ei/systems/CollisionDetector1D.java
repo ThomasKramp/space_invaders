@@ -1,13 +1,14 @@
 package be.uantwerpen.fti.ei.systems;
 
 import be.uantwerpen.fti.ei.components.MovementComp;
+import be.uantwerpen.fti.ei.interfaces.ICollisionDetector;
 
 import java.util.List;
 
-public class CollisionDetector {
+public class CollisionDetector1D implements ICollisionDetector {
 
     int width, height;
-    public CollisionDetector(int width, int height) {
+    public CollisionDetector1D(int width, int height) {
         this.width = width;
         this.height = height;
     }
