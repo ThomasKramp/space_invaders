@@ -9,14 +9,14 @@ public class J2DVisualComp extends AVisualComp {
     GraphicsContext grCtx;
     PTR<Integer> scale;
     private int[] rgb = new int[3];
-    PTR<Boolean> isHit; // this is used for visual purposes
+    PTR<Boolean> isHit, isBigHit; // this is used for visual purposes
 
     public J2DVisualComp(PTR<Integer> x, PTR<Integer> y, int size, PTR<Integer> scale, int[] rgb,
-                         PTR<Boolean> isHit, GraphicsContext grCtx) {
+                         PTR<Boolean> isHit, PTR<Boolean> isBigHit, GraphicsContext grCtx) {
         super(x, y, size);
         setScale(scale);
         setRGB(rgb);
-        setHit(isHit);
+        setHit(isHit); setBigHit(isBigHit);
         setGrCtx(grCtx);
     }
 
@@ -32,4 +32,6 @@ public class J2DVisualComp extends AVisualComp {
 
     private void setHit(PTR<Boolean> isHit) { this.isHit = isHit; }
     public boolean isHit() { return isHit.getValue(); }
+    private void setBigHit(PTR<Boolean> isBigHit) { this.isBigHit = isBigHit; }
+    public boolean isBigHit() { return isBigHit.getValue(); }
 }

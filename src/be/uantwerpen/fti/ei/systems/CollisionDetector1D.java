@@ -20,15 +20,16 @@ public class CollisionDetector1D implements ICollisionDetector {
 
     public boolean checkHorizontalWallCollisions(MovementComp comp) {
         return comp.getY() + comp.getVy() < 0 // Top wall hit
-            || comp.getY() + comp.getSize() + comp.getVy() > height; // Bottom wall hit
+            || comp.getY() + 1 + comp.getVy() > height; // Bottom wall hit
     }
 
     public MovementComp checkCollisions(MovementComp comp, List<MovementComp> entities) {
         for (MovementComp entity: entities) {
             if (comp != entity) {
-                if (comp.getX() + comp.getVx() == entity.getX()
-                &&  comp.getY() + comp.getVy() == entity.getY())
-                    return entity;
+                for (int i = 0; i < comp.getSize(); i++)
+                    if (comp.getX() + i + comp.getVx() == entity.getX()
+                    &&  comp.getY() + comp.getVy() == entity.getY())
+                        return entity;
             }
         }
         return null;

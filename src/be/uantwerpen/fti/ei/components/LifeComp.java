@@ -5,12 +5,12 @@ import be.uantwerpen.fti.ei.entities.EntityType;
 
 public class LifeComp {
     int lives;
-    PTR<Boolean> isHit, isDead;
+    PTR<Boolean> isHit, isBigHit, isDead;
     EntityType type;
 
-    public LifeComp(int lives, PTR<Boolean> isHit, PTR<Boolean> isDead, EntityType type) {
+    public LifeComp(int lives, PTR<Boolean> isHit, PTR<Boolean> isBigHit, PTR<Boolean> isDead, EntityType type) {
         setLives(lives);
-        setHit(isHit); setDead(isDead);
+        setHit(isHit); setBigHit(isBigHit); setDead(isDead);
         setType(type);
     }
 
@@ -21,6 +21,11 @@ public class LifeComp {
     public boolean isHit() { return isHit.getValue(); }
     public void setHit(PTR<Boolean> isHit) { this.isHit = isHit; }
     public void setHit(boolean isHit) { this.isHit.setValue(isHit); }
+
+    //public PTR<Boolean> isBigHit() { return isBigHit; }
+    public boolean isBigHit() { return isBigHit.getValue(); }
+    public void setBigHit(PTR<Boolean> isBigHit) { this.isBigHit = isBigHit; }
+    public void setBigHit(boolean isBigHit) { this.isBigHit.setValue(isBigHit); }
 
     // public PTR<Boolean> isDeadPtr() { return isDead; }
     public boolean isDead() { return isDead.getValue(); }

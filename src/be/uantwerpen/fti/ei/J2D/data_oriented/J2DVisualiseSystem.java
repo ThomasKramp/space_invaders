@@ -23,9 +23,12 @@ public class J2DVisualiseSystem implements IVisualiseSystem {
 
             if (j2dComp.isHit())
                 g2d.setColor(new Color(255 - j2dComp.getR(),255 - j2dComp.getG(),255 - j2dComp.getB())); // invert colors if hit
+            else if (j2dComp.isBigHit())
+                g2d.setColor(new Color(224,224,224)); // invert colors if hit
             else
                 g2d.setColor(new Color(j2dComp.getR(), j2dComp.getG(), j2dComp.getB()));
-            g2d.fillRect(j2dComp.getX() * grCtx.getScale(), j2dComp.getY() * grCtx.getScale(), j2dComp.getSize() * j2dComp.getScale(), j2dComp.getSize() * j2dComp.getScale());
+            g2d.fillRect(j2dComp.getX() * grCtx.getScale(), j2dComp.getY() * grCtx.getScale(),
+                      j2dComp.getSize() * j2dComp.getScale(), j2dComp.getScale());
         }
         grCtx.render();
     }

@@ -9,17 +9,18 @@ public class LifeSystem {
         int lives;
         for (LifeComp component: components) {
             lives = component.getLives();
-            if (component.isDead()) lives = 0;
-            else if (component.isHit()) {
-                lives = lives - 1;
-                if (lives == 0) component.setDead(true);
-            }
+            if (component.isHit())          lives = lives - 1;
+            else if (component.isBigHit())  lives = lives - 3;
+            else if (component.isDead())    lives = 0;
+            if (lives == 0) component.setDead(true);
             component.setLives(lives);
         }
     }
 
-    // Needed for visualisation
     public void resetHits(List<LifeComp> components) {
-        for (LifeComp component: components) component.setHit(false);
+        for (LifeComp component: components) {
+            component.setHit(false);
+            component.setBigHit(false);
+        }
     }
 }

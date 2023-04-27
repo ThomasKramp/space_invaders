@@ -59,8 +59,8 @@ public class Game {
             }
         }
         // Walls
-        entities.add(factory.getWall(screenWidth / 3, screenHeight * 4 / 6));
-        entities.add(factory.getWall(screenWidth * 2 / 3, screenHeight * 4 / 6));
+        entities.add(factory.getWall(screenWidth / 3 - 1, screenHeight * 4 / 6));
+        entities.add(factory.getWall(screenWidth * 2 / 3 - 1, screenHeight * 4 / 6));
 
         MovementSystem mover = new MovementSystem();
         ICollisionDetector colDet = factory.getCollisionDetector(screenWidth, screenHeight);
@@ -252,7 +252,7 @@ public class Game {
         // Enemies blow up with direct contact to players and walls
         if (comp.getType() == EntityType.ENEMY && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.WALL)) {
             comp.setDead(true);
-            entity.setHit(true);
+            entity.setBigHit(true);
             return true;
         }
 

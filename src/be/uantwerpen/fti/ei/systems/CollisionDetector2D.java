@@ -1,7 +1,6 @@
 package be.uantwerpen.fti.ei.systems;
 
 import be.uantwerpen.fti.ei.components.MovementComp;
-import be.uantwerpen.fti.ei.entities.EntityType;
 import be.uantwerpen.fti.ei.interfaces.ICollisionDetector;
 
 import java.util.List;
@@ -18,43 +17,32 @@ public class CollisionDetector2D implements ICollisionDetector {
     public boolean checkVerticalWallCollisions(MovementComp comp) {
         // Check if x is within borders
         if (comp.getX() + comp.getVx() <= 0) {
-            comp.setVx(-comp.getX());
+            //comp.setVx(-comp.getX());
+            return true;
         } else if (comp.getX() + comp.getSize() + comp.getVx() >= width) {
-            comp.setVx(width - (comp.getX() + comp.getSize()));
-        }
-        // Check if y is within borders
-        if (comp.getY() + comp.getVy() <= 0) {
-            comp.setVy(-comp.getY());
-        } else if (comp.getY() + comp.getSize() + comp.getVy() >= height) {
-            comp.setVy(height - (comp.getY() + comp.getSize()));
-        }
-
-        // Check if top or bottom of screen is hit
-        if (comp.getY() == 0 || comp.getY() + comp.getVy() == height) {
-            //comp.setDead(true);
+            //comp.setVx(width - (comp.getX() + comp.getSize()));
+            return true;
         }
         return false;
     }
 
     @Override
     public boolean checkHorizontalWallCollisions(MovementComp comp) {
-        // Check if x is within borders
-        if (comp.getX() + comp.getVx() <= 0) {
-            comp.setVx(-comp.getX());
-        } else if (comp.getX() + comp.getSize() + comp.getVx() >= width) {
-            comp.setVx(width - (comp.getX() + comp.getSize()));
-        }
         // Check if y is within borders
         if (comp.getY() + comp.getVy() <= 0) {
-            comp.setVy(-comp.getY());
+            //comp.setVy(-comp.getY());
+            return true;
         } else if (comp.getY() + comp.getSize() + comp.getVy() >= height) {
-            comp.setVy(height - (comp.getY() + comp.getSize()));
+            //comp.setVy(height - (comp.getY() + comp.getSize()));
+            return true;
         }
 
         // Check if top or bottom of screen is hit
         if (comp.getY() == 0 || comp.getY() + comp.getVy() == height) {
             //comp.setDead(true);
+            return true;
         }
+
         return false;
     }
 
@@ -93,17 +81,17 @@ public class CollisionDetector2D implements ICollisionDetector {
                         // System.out.println("Vertical True");
                         // Upper collision
                         if ((upperDiff >= 0) && !(downDiff >= 0))
-                            if (Math.abs(upperDiff) < Math.abs(1)) // if remaining space < movement
-                                if (comp.getVy() > 0) {                             // set remaining space as speed
-                                    if (!checkHits(comp, entity))       // check for bullet hit
-                                        comp.setVy(upperDiff);          // else change speed
+                            if (Math.abs(upperDiff) < Math.abs(1))  // if remaining space < movement
+                                if (comp.getVy() > 0) {             // set remaining space as speed
+                                    comp.setVy(upperDiff);          // else change speed
+                                    return entity;
                                 }
                         // Down collision
                         if (!(upperDiff >= 0) && (downDiff >= 0))
                             if (Math.abs(downDiff) < Math.abs(1))
                                 if (comp.getVy() < 0) {
-                                    if (!checkHits(comp, entity))
-                                        comp.setVy(-downDiff);
+                                    comp.setVy(-downDiff);
+                                    return entity;
                                 }
                     }
                 } else if (comp.getVx() != 0) {
@@ -118,34 +106,20 @@ public class CollisionDetector2D implements ICollisionDetector {
                         if ((leftDiff >= 0) && !(rightDiff >= 0))
                             if (Math.abs(leftDiff) < Math.abs(1))
                                 if (comp.getVx() > 0) {
-                                    if (!checkHits(comp, entity))
-                                        comp.setVx(leftDiff);
+                                    comp.setVx(leftDiff);
+                                    return entity;
                                 }
                         // Right collision
                         if (!(leftDiff >= 0) && (rightDiff >= 0))
                             if (Math.abs(rightDiff) < Math.abs(1))
                                 if (comp.getVx() < 0) {
-                                    if (!checkHits(comp, entity))
-                                        comp.setVx(-rightDiff);
+                                    comp.setVx(-rightDiff);
+                                    return entity;
                                 }
                     }
                 }
             }
         }
-        return comp;
-    }
-
-    public boolean checkHits(MovementComp comp, MovementComp entity) {
-        boolean bullet1, bullet2;
-        // Players can shoot enemies and bonuses
-        bullet1 = comp.getType() == EntityType.P_BULLET && (entity.getType() == EntityType.ENEMY || entity.getType() == EntityType.BONUS || entity.getType() == EntityType.E_BULLET)
-                || entity.getType() == EntityType.P_BULLET && (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.BONUS || comp.getType() == EntityType.E_BULLET);
-        // Enemies can shoot players and walls
-        bullet2 = comp.getType() == EntityType.E_BULLET && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.WALL || entity.getType() == EntityType.P_BULLET)
-                || entity.getType() == EntityType.E_BULLET && (comp.getType() == EntityType.PLAYER || comp.getType() == EntityType.WALL || comp.getType() == EntityType.P_BULLET);
-        if (bullet1 || bullet2) {
-            return true;
-        }
-        return false;
+        return null;
     }
 }
