@@ -28,11 +28,12 @@ public class J2DFactory implements IFactory {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
         IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
         BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        EntityType type = EntityType.PLAYER;
         int size = 1; IntPtr scale = new IntPtr(grCtx.getScale());
         int[] rgb = {192, 96, 64};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size),
-                new LifeComp(5, isHit, isDead, EntityType.PLAYER),
+                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new LifeComp(5, isHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, grCtx)
         );
     }
@@ -42,11 +43,12 @@ public class J2DFactory implements IFactory {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
         IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
         BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        EntityType type = EntityType.P_BULLET;
         int size = 1; IntPtr scale = new IntPtr(grCtx.getScale()/4);
         int[] rgb = {192, 96, 64};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size),
-                new LifeComp(1, isHit, isDead, EntityType.P_BULLET),
+                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new LifeComp(1, isHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, grCtx)
         );
     }
@@ -56,11 +58,12 @@ public class J2DFactory implements IFactory {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
         IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
         BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        EntityType type = EntityType.WALL;
         int size = 1; IntPtr scale = new IntPtr(grCtx.getScale());
         int[] rgb = {128, 64, 32};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size),
-                new LifeComp(20, isHit, isDead, EntityType.WALL),
+                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new LifeComp(20, isHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, grCtx)
         );
     }
@@ -70,11 +73,12 @@ public class J2DFactory implements IFactory {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
         IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
         BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        EntityType type = EntityType.ENEMY;
         int size = 1; IntPtr scale = new IntPtr(grCtx.getScale());
         int[] rgb = {48, 96, 192};
         return new Entity(
-                new SmartMoveComp(xPtr, yPtr, vxPtr, vyPtr, size),
-                new LifeComp(3, isHit, isDead, EntityType.ENEMY),
+                new SmartMoveComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new LifeComp(3, isHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, grCtx)
         );
     }
@@ -84,11 +88,12 @@ public class J2DFactory implements IFactory {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
         IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
         BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        EntityType type = EntityType.BOSS;
         int size = 2; IntPtr scale = new IntPtr(grCtx.getScale());
         int[] rgb = {48, 96, 192};
         return new Entity(
-                new SmartMoveComp(xPtr, yPtr, vxPtr, vyPtr, size),
-                new LifeComp(5, isHit, isDead, EntityType.BOSS),
+                new SmartMoveComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new LifeComp(5, isHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, grCtx)
         );
     }
@@ -98,11 +103,12 @@ public class J2DFactory implements IFactory {
         IntPtr xPtr = new IntPtr(x), yPtr = new IntPtr(y);
         IntPtr vxPtr = new IntPtr(), vyPtr = new IntPtr();
         BoolPtr isHit = new BoolPtr(), isDead = new BoolPtr();
+        EntityType type = EntityType.E_BULLET;
         int size = 1; IntPtr scale = new IntPtr(grCtx.getScale()/4);
         int[] rgb = {48, 96, 192};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size),
-                new LifeComp(1, isHit, isDead, EntityType.E_BULLET),
+                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new LifeComp(1, isHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, grCtx)
         );
     }

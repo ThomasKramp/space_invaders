@@ -1,15 +1,18 @@
 package be.uantwerpen.fti.ei.components;
 
 import be.uantwerpen.fti.ei.dataStruct.IntPtr;
+import be.uantwerpen.fti.ei.entities.EntityType;
 
 public class MovementComp {
     protected IntPtr x, y, vx, vy;
     int size;
+    EntityType type;
 
-    public MovementComp(IntPtr x, IntPtr y, IntPtr Vx, IntPtr Vy, int size) {
+    public MovementComp(IntPtr x, IntPtr y, IntPtr Vx, IntPtr Vy, int size, EntityType type) {
         setX(x);    setY(y);
         setVx(Vx);  setVy(Vy);
         setSize(size);
+        setType(type);
     }
 
     public IntPtr getXPtr() { return x; }
@@ -40,4 +43,7 @@ public class MovementComp {
 
     public int getSize() { return size; }
     public void setSize(int size) { this.size = size; }
+
+    public EntityType getType() { return type; }
+    public void setType(EntityType type) { this.type = type; }
 }

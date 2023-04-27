@@ -93,54 +93,60 @@ public class Game {
 
             /*--------------------------------------------------------------------------------------------------------*/
             // List initialization
-            // Life
-            List<LifeComp> lifeList = entities.stream()
-                    .map(Entity::getLifeComp)
-                    .collect(Collectors.toList());
-            lifeList.add(player.getLifeComp());
-
             // Move
             List<MovementComp> moveList = entities.stream()
                     .map(Entity::getMovementComp)
                     .collect(Collectors.toList());
-            moveList.add(player.getMovementComp());
-
+            // Life
+            List<LifeComp> lifeList = entities.stream()
+                    .map(Entity::getLifeComp)
+                    .collect(Collectors.toList());
             // Visualise
             List<AVisualComp> visualList = entities.stream()
                     .map(Entity::getVisualComp)
                     .collect(Collectors.toList());
-            visualList.add(player.getVisualComp());
 
             /*--------------------------------------------------------------------------------------------------------*/
             // Entity movement
-            MovementComp moveComp, collider;
-            for (Entity entity: entities) {
-                moveComp = entity.getMovementComp();
-                EditEntityBehaviour(moveComp, entity.getLifeComp().getType());
+            for (MovementComp moveComp: moveList) {
+                // Add new entities
+                if (moveComp.getType() == EntityType.ENEMY)
+                    if (moveComp instanceof SmartMoveComp SComp)
+                        if (SComp.getCounter() % 16 == 3) {
+                            int x = SComp.getX();
+                            int y = SComp.getY() + 1;
+                            entities.add(factory.getEBullet(x, y));
+                        }
 
-                // Collision detection
+                // Edit entity behaviour
+                EditEntityBehaviour(moveComp);
+
+                // Collision detection (walls)
                 if (colDet.checkVerticalWallCollisions(moveComp)) {
                     moveComp.setVx(0);
                 }
                 if (colDet.checkHorizontalWallCollisions(moveComp)) {
                     moveComp.setVy(0);
-                    entity.getLifeComp().setDead(true);
+                    // Set entity ass dead if they hit the bottom or top walls
+                    entities.stream().filter(entity -> entity.getMovementComp().equals(moveComp))
+                            .findFirst()
+                            .ifPresent(entity -> entity.getLifeComp().setDead(true));
                 }
-                collider = colDet.checkCollisions(moveComp, moveList);
+
+                // Collision detection (entities)
+                final MovementComp collider = colDet.checkCollisions(moveComp, moveList);
                 if (collider != null) {
-                    Entity tempEnt = null;
+                    Optional<Entity> moverEnt, colliderEnt;
+                    // Search for mover
+                    moverEnt = entities.stream().filter(entity -> entity.getMovementComp().equals(moveComp)).findFirst();
                     // Search for collider
-                    for (Entity ent: entities) {
-                        if (ent.getMovementComp() == collider) {
-                            tempEnt = ent;
-                            break;
-                        }
-                    }
+                    colliderEnt = entities.stream().filter(entity -> entity.getMovementComp().equals(collider)).findFirst();
                     // Use Collider
-                    if (tempEnt == null || !checkHits(entity.getLifeComp(), tempEnt.getLifeComp())) {
-                        moveComp.setVx(0);
-                        moveComp.setVy(0);
-                    }
+                    if (moverEnt.isPresent() && colliderEnt.isPresent())
+                        if (!checkHits(moverEnt.get().getLifeComp(), colliderEnt.get().getLifeComp())) {
+                            moveComp.setVx(0);
+                            moveComp.setVy(0);
+                        }
                 }
             }
             // Move
@@ -148,7 +154,6 @@ public class Game {
 
             /*--------------------------------------------------------------------------------------------------------*/
             // Entity filtering (based on lives)
-            // Life
 
             if (player.getLifeComp().isHit())
                 isPaused = isPaused;
@@ -167,25 +172,6 @@ public class Game {
                 }
             }
 
-            life.resetHits(lifeList);
-
-            // if (player.getLifeComp().getLives() <= 0) isRunning = false;
-
-            /*--------------------------------------------------------------------------------------------------------*/
-            // Add entities
-            List<Entity> newEntities = new ArrayList<>();
-
-            // Check for new entities
-            for (Entity entity: entities)
-                if (entity.getLifeComp().getType() == EntityType.ENEMY)
-                    if (entity.getMovementComp() instanceof SmartMoveComp SComp)
-                        if (SComp.getCounter() % 16 == 3) {
-                            int x = SComp.getX();
-                            int y = SComp.getY() + 1;
-                            newEntities.add(factory.getEBullet(x, y));
-                        }
-            entities.addAll(newEntities);
-
             /*--------------------------------------------------------------------------------------------------------*/
             // Visualisation
 
@@ -197,6 +183,11 @@ public class Game {
             visualiser.visualise(visualList);
 
             /*--------------------------------------------------------------------------------------------------------*/
+            // Reset
+            life.resetHits(lifeList);
+            // if (player.getLifeComp().getLives() <= 0) isRunning = false;
+
+            /*--------------------------------------------------------------------------------------------------------*/
             // Delay
             endTime = System.nanoTime();
             duration = (endTime - startTime);
@@ -206,7 +197,7 @@ public class Game {
         visualiser.end();
     }
 
-    public void EditEntityBehaviour(MovementComp moveComp, EntityType type){
+    public void EditEntityBehaviour(MovementComp moveComp){
         if (moveComp instanceof SmartMoveComp SComp) {
             byte counter = SComp.getCounter();
             if ((counter + 1) % 32 == 0) {
@@ -217,8 +208,8 @@ public class Game {
             }
             SComp.setCounter((byte) (counter + 1));
         } else {
-            if (type == EntityType.P_BULLET)        moveComp.setVy(-1);
-            else if (type == EntityType.E_BULLET)   moveComp.setVy(1);
+            if (moveComp.getType() == EntityType.P_BULLET)      moveComp.setVy(-1);
+            else if (moveComp.getType() == EntityType.E_BULLET) moveComp.setVy(1);
         }
     }
 
