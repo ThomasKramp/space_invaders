@@ -4,10 +4,12 @@ import be.uantwerpen.fti.ei.dataStruct.IntPtr;
 
 public class MovementComp {
     protected IntPtr x, y, vx, vy;
+    int size;
 
-    public MovementComp(IntPtr x, IntPtr y, IntPtr Vx, IntPtr Vy) {
+    public MovementComp(IntPtr x, IntPtr y, IntPtr Vx, IntPtr Vy, int size) {
         setX(x);    setY(y);
-        setVx(Vx);   setVy(Vy);
+        setVx(Vx);  setVy(Vy);
+        setSize(size);
     }
 
     public IntPtr getXPtr() { return x; }
@@ -35,4 +37,7 @@ public class MovementComp {
     public int getVy() { return vy.getValue(); }
     public void setVy(IntPtr vy) { this.vy = vy; }
     public void setVy(int vy) { this.vy.setValue(vy); }
+
+    public int getSize() { return size; }
+    public void setSize(int size) { this.size = size; }
 }

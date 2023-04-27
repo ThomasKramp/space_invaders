@@ -1,6 +1,5 @@
 package be.uantwerpen.fti.ei.interfaces;
 
-import be.uantwerpen.fti.ei.components.AVisualComp;
 import be.uantwerpen.fti.ei.entities.Entity;
 import be.uantwerpen.fti.ei.input.AInput;
 import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
@@ -21,15 +20,18 @@ public interface IFactory {
      * @param y (int)
      * @return AShip (PlayerShip)
      */
+    void setScreenDimensions(int[] screenDimen);
+
     Entity getPlayer(int x, int y);
     Entity getPBullet(int x, int y);
+    public Entity getWall(int x, int y);
 
-    Entity getSmallEnemy(int x, int y);
     Entity getEnemy(int x, int y);
-    Entity getBigEnemy(int x, int y);
+    Entity getBossEnemy(int x, int y);
     Entity getEBullet(int x, int y);
 
     IVisualiseSystem getVisualiseSystem();
+    IHotBar getHotBarHandler();
 
     AInput getInput();
 

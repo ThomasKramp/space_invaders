@@ -1,2 +1,8 @@
-width 512
-height 512
+# Main Config
+## screen configuration (in amount of spaces)
+screen_width=64
+screen_height=48
+
+## level files
+level1_config=level1_config.txt
+level2_config=level2_config.txt

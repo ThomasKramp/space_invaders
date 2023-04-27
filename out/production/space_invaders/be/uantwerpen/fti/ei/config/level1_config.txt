@@ -1,0 +1,14 @@
+# Level 1 Config
+## Player config
+player_lives=5
+
+## Enemy config
+enemy_total=13
+enemy_lives=2
+
+## Bonus config
+bonus_total=2
+
+## Wall config
+wall_total=2
+wall_lives=20

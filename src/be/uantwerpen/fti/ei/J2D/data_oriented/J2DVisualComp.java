@@ -9,27 +9,29 @@ import java.awt.*;
 
 public class J2DVisualComp extends AVisualComp {
     GraphicsContext grCtx;
-    int r, g, b;
+    IntPtr scale;
+    private int[] rgb = new int[3];
     BoolPtr isHit; // this is used for visual purposes
 
-    public J2DVisualComp(IntPtr x, IntPtr y, int size, int r, int g, int b, BoolPtr isHit, GraphicsContext grCtx) {
+    public J2DVisualComp(IntPtr x, IntPtr y, int size, IntPtr scale, int[] rgb,
+                         BoolPtr isHit, GraphicsContext grCtx) {
         super(x, y, size);
-        setR(r); setG(g); setB(b);
+        setScale(scale);
+        setRGB(rgb);
         setHit(isHit);
         setGrCtx(grCtx);
     }
 
-    public void draw() {
-        Graphics2D g2d = grCtx.getG2d();
-        if (isHit())    g2d.setColor(new Color(255 - r,255 - g,255 - b)); // invert colors if hit
-        else            g2d.setColor(new Color(r,g,b));
-        g2d.fillRect(getX(), getY(), getSize(), getSize());
-    }
-
     private void setGrCtx(GraphicsContext grCtx) { this.grCtx = grCtx; }
-    private void setR(int r) { this.r = r; }
-    private void setG(int g) { this.g = g; }
-    private void setB(int b) { this.b = b; }
+
+    private void setScale(IntPtr scale) { this.scale = scale; }
+    public int getScale() { return scale.getValue(); }
+
+    private void setRGB(int[] rgb) { this.rgb = rgb; }
+    public int getR() { return rgb[0]; }
+    public int getG() { return rgb[1]; }
+    public int getB() { return rgb[2]; }
+
     private void setHit(BoolPtr isHit) { this.isHit = isHit; }
-    private boolean isHit() { return isHit.isValue(); }
+    public boolean isHit() { return isHit.isValue(); }
 }

@@ -22,12 +22,8 @@ public class IntPtr {
     public void add(int value) {
         setValue(getValue() + value);
     }
-    public void mul(int value) {
-        setValue(getValue() * value);
-    }
-    public void mod(int value) {
-        setValue(getValue() % value);
-    }
+    // public void mul(int value) { setValue(getValue() * value); }
+    // public void mod(int value) { setValue(getValue() % value); }
     /**
      * @author      Specifies author
      * @deprecated  Specifies deprecation

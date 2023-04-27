@@ -5,39 +5,23 @@ import be.uantwerpen.fti.ei.interfaces.IFactory;
 import be.uantwerpen.fti.ei.config.ConfigReader;
 
 import java.io.*;
+import java.nio.file.Path;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Space invaders\n");
 
+        String cwd = Path.of("").toAbsolutePath().toString();
+
         ConfigReader config = new ConfigReader();
         try {
-            config.readFile();
+            config.getScreenSettings(cwd + "\\src\\be\\uantwerpen\\fti\\ei\\config\\config.txt");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        IFactory fact = new J2DFactory(config.width, config.height);
-        Game game = new Game(fact, config.width, config.height);
+        IFactory fact = new J2DFactory();
+        Game game = new Game(fact, config.getScreenDimen());
         game.Start();
     }
-
-
-    /*public static void main(String args[]) {
-        class IntPtr {
-            public int value;
-        }
-
-        IntPtr i1 = new IntPtr();
-        i1.value = 2;
-        IntPtr i2 = i1;
-        i2.value++;
-        System.out.println(i1.value);
-
-
-        Integer i3 = 2;
-        Integer i4 = i3;
-        i4++;
-        System.out.println(i3);
-    }*/
 }

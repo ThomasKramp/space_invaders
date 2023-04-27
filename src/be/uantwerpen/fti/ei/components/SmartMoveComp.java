@@ -4,18 +4,18 @@ import be.uantwerpen.fti.ei.components.MovementComp;
 import be.uantwerpen.fti.ei.dataStruct.IntPtr;
 
 public class SmartMoveComp extends MovementComp {
-    int counter;
+    byte counter;
     int direction;
-    public SmartMoveComp(IntPtr x, IntPtr y, IntPtr Vx, IntPtr Vy) {
-        super(x, y, Vx, Vy);
-        setCounter(0);
+    public SmartMoveComp(IntPtr x, IntPtr y, IntPtr Vx, IntPtr Vy, int size) {
+        super(x, y, Vx, Vy, size);
+        setCounter((byte) 0);
         setDirection(1);
     }
 
-    public int getCounter() {
+    public byte getCounter() {
         return counter;
     }
-    public void setCounter(int counter) {
+    public void setCounter(byte counter) {
         this.counter = counter;
     }
 
