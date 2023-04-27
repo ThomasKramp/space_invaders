@@ -3,9 +3,14 @@ package be.uantwerpen.fti.ei.entities;
 public enum EntityType {
     PLAYER,
     P_BULLET,
-    ENEMY,
-    BOSS,
-    E_BULLET,
+    P_ROCKET,
     WALL,
-    BONUS
+    ENEMY,
+    E_BULLET,
+    BOSS,
+    B_ROCKET,
+    BONUS,
+    BONUS_LIFE,
+    BONUS_SCORE,
+    BONUS_ROCKET
 }

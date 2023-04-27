@@ -8,18 +8,30 @@ public interface IFactory {
 
     void setScreenDimensions(int[] screenDimen);
 
+    /*--------------------------------------------------------------------------------------------------------*/
+    // Player
     Entity getPlayer(int x, int y);
     Entity getPBullet(int x, int y);
+    Entity getPRocket(int x, int y);
     public Entity getWall(int x, int y);
 
+    /*--------------------------------------------------------------------------------------------------------*/
+    // Enemies
     Entity getEnemy(int x, int y);
-    Entity getBossEnemy(int x, int y);
     Entity getEBullet(int x, int y);
+    Entity getBoss(int x, int y);
+    Entity getBRocket(int x, int y);
 
+    /*--------------------------------------------------------------------------------------------------------*/
+    // Bonus
+    Entity getBonusLives(int x, int y);
+    Entity getBonusScore(int x, int y);
+    Entity getBonusRocket(int x, int y);
 
+    /*--------------------------------------------------------------------------------------------------------*/
+    // System
     ICollisionDetector getCollisionDetector(int width, int height);
     IVisualiseSystem getVisualiseSystem();
     IHotBar getHotBarHandler();
-
     AInput getInput();
 }

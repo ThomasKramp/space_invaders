@@ -237,18 +237,56 @@ public class Game {
 
     public boolean checkHits(LifeComp comp, LifeComp entity) {
         boolean bullet1, bullet2;
+
+        /*--------------------------------------------------------------------------------------------------------*/
+        // Bullets
         // Players can shoot enemies, bosses and bonuses
-        bullet1 =  comp.getType() == EntityType.P_BULLET && (entity.getType() == EntityType.ENEMY || entity.getType() == EntityType.BONUS || entity.getType() == EntityType.E_BULLET)
-                || entity.getType() == EntityType.P_BULLET && (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.BONUS || comp.getType() == EntityType.E_BULLET);
+        bullet1 =  comp.getType() == EntityType.P_BULLET
+                && (entity.getType() == EntityType.ENEMY || entity.getType() == EntityType.E_BULLET || entity.getType() == EntityType.BOSS  || entity.getType() == EntityType.B_ROCKET
+                || entity.getType() == EntityType.BONUS_LIFE  || entity.getType() == EntityType.BONUS_SCORE || entity.getType() == EntityType.BONUS_ROCKET)
+
+                || entity.getType() == EntityType.P_BULLET
+                && (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.E_BULLET || comp.getType() == EntityType.BOSS || comp.getType() == EntityType.B_ROCKET
+                || comp.getType() == EntityType.BONUS_LIFE  || comp.getType() == EntityType.BONUS_SCORE || comp.getType() == EntityType.BONUS_ROCKET);
+
         // Enemies can shoot players and walls
-        bullet2 =  comp.getType() == EntityType.E_BULLET && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.WALL || entity.getType() == EntityType.P_BULLET)
-                || entity.getType() == EntityType.E_BULLET && (comp.getType() == EntityType.PLAYER || comp.getType() == EntityType.WALL || comp.getType() == EntityType.P_BULLET);
+        bullet2 =  comp.getType() == EntityType.E_BULLET
+                && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.P_BULLET || entity.getType() == EntityType.P_ROCKET || entity.getType() == EntityType.WALL)
+
+                || entity.getType() == EntityType.E_BULLET
+                && (comp.getType() == EntityType.PLAYER || comp.getType() == EntityType.P_BULLET || comp.getType() == EntityType.P_ROCKET || comp.getType() == EntityType.WALL);
+
         if (bullet1 || bullet2) {
             comp.setHit(true);
             entity.setHit(true);
             return true;
         }
 
+        /*--------------------------------------------------------------------------------------------------------*/
+        // Rockets
+        bullet1 =  comp.getType() == EntityType.P_ROCKET
+                && (entity.getType() == EntityType.ENEMY || entity.getType() == EntityType.E_BULLET || entity.getType() == EntityType.BOSS  || entity.getType() == EntityType.B_ROCKET
+                || entity.getType() == EntityType.BONUS_LIFE  || entity.getType() == EntityType.BONUS_SCORE || entity.getType() == EntityType.BONUS_ROCKET)
+
+                || entity.getType() == EntityType.P_ROCKET
+                && (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.E_BULLET || comp.getType() == EntityType.BOSS || comp.getType() == EntityType.B_ROCKET
+                || comp.getType() == EntityType.BONUS_LIFE  || comp.getType() == EntityType.BONUS_SCORE || comp.getType() == EntityType.BONUS_ROCKET);
+
+        // Enemies can shoot players and walls
+        bullet2 =  comp.getType() == EntityType.B_ROCKET
+                && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.P_BULLET || entity.getType() == EntityType.P_ROCKET || entity.getType() == EntityType.WALL)
+
+                || entity.getType() == EntityType.B_ROCKET
+                && (comp.getType() == EntityType.PLAYER || comp.getType() == EntityType.P_BULLET || comp.getType() == EntityType.P_ROCKET || comp.getType() == EntityType.WALL);
+
+        if (bullet1 || bullet2) {
+            comp.setBigHit(true);
+            entity.setBigHit(true);
+            return true;
+        }
+
+        /*--------------------------------------------------------------------------------------------------------*/
+        // Enemy collision
         // Enemies blow up with direct contact to players and walls
         if (comp.getType() == EntityType.ENEMY && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.WALL)) {
             comp.setDead(true);
@@ -256,6 +294,8 @@ public class Game {
             return true;
         }
 
+        /*--------------------------------------------------------------------------------------------------------*/
+        // Boss collision
         // Bosses destroy players and walls with direct contact
         if (comp.getType() == EntityType.BOSS && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.WALL)) {
             comp.setDead(true);
@@ -263,12 +303,17 @@ public class Game {
             return true;
         }
 
+        /*--------------------------------------------------------------------------------------------------------*/
+        // Pass Through
         // Player type entities can't shoot players, walls or player bullets
-        bullet1 =  (comp.getType() == EntityType.PLAYER || comp.getType() == EntityType.WALL || comp.getType() == EntityType.P_BULLET)
-                && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.WALL || entity.getType() == EntityType.P_BULLET);
+        bullet1 =  (comp.getType() == EntityType.PLAYER || comp.getType() == EntityType.P_BULLET || comp.getType() == EntityType.P_ROCKET || comp.getType() == EntityType.WALL)
+                && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.P_BULLET || entity.getType() == EntityType.P_ROCKET || entity.getType() == EntityType.WALL);
+
         // Enemy type entities can't shoot enemies, bosses, bonuses or enemy bullets
-        bullet2 =  (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.BONUS || comp.getType() == EntityType.E_BULLET)
-                && (entity.getType() == EntityType.ENEMY || entity.getType() == EntityType.BONUS || entity.getType() == EntityType.E_BULLET);
+        bullet2 =  (comp.getType() == EntityType.ENEMY || comp.getType() == EntityType.E_BULLET || comp.getType() == EntityType.BOSS  || comp.getType() == EntityType.B_ROCKET
+                || comp.getType() == EntityType.BONUS_LIFE  || comp.getType() == EntityType.BONUS_SCORE || comp.getType() == EntityType.BONUS_ROCKET)
+                && (entity.getType() == EntityType.ENEMY || entity.getType() == EntityType.E_BULLET || entity.getType() == EntityType.BOSS  || entity.getType() == EntityType.B_ROCKET
+                || entity.getType() == EntityType.BONUS_LIFE  || entity.getType() == EntityType.BONUS_SCORE || entity.getType() == EntityType.BONUS_ROCKET);
         return bullet1 || bullet2;
     }
 }
