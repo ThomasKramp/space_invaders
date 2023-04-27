@@ -10,8 +10,10 @@ import be.uantwerpen.fti.ei.J2D.data_oriented.J2DVisualiseSystem;
 import be.uantwerpen.fti.ei.entities.Entity;
 import be.uantwerpen.fti.ei.entities.EntityType;
 import be.uantwerpen.fti.ei.input.AInput;
+import be.uantwerpen.fti.ei.interfaces.ICollisionDetector;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
 import be.uantwerpen.fti.ei.interfaces.IHotBar;
+import be.uantwerpen.fti.ei.systems.CollisionDetector1D;
 import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
 
 public class J2DFactory implements IFactory {
@@ -112,6 +114,9 @@ public class J2DFactory implements IFactory {
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, grCtx)
         );
     }
+
+    @Override
+    public ICollisionDetector getCollisionDetector(int width, int height) { return new CollisionDetector1D(width, height); }
 
     @Override
     public IVisualiseSystem getVisualiseSystem() { return new J2DVisualiseSystem(grCtx); }

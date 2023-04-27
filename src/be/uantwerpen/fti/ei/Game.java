@@ -1,8 +1,8 @@
 package be.uantwerpen.fti.ei;
 
 import be.uantwerpen.fti.ei.entities.EntityType;
+import be.uantwerpen.fti.ei.interfaces.ICollisionDetector;
 import be.uantwerpen.fti.ei.interfaces.IHotBar;
-import be.uantwerpen.fti.ei.systems.CollisionDetector1D;
 import be.uantwerpen.fti.ei.components.*;
 import be.uantwerpen.fti.ei.entities.Entity;
 import be.uantwerpen.fti.ei.input.AInput;
@@ -63,7 +63,7 @@ public class Game {
         entities.add(factory.getWall(screenWidth * 2 / 3, screenHeight * 4 / 6));
 
         MovementSystem mover = new MovementSystem();
-        CollisionDetector1D colDet = new CollisionDetector1D(screenWidth, screenHeight);
+        ICollisionDetector colDet = factory.getCollisionDetector(screenWidth, screenHeight);
         LifeSystem life = new LifeSystem();
         IVisualiseSystem visualiser = factory.getVisualiseSystem();
         IHotBar hotBarHandler = factory.getHotBarHandler();
