@@ -1,14 +1,14 @@
 package be.uantwerpen.fti.ei.components;
 
-import be.uantwerpen.fti.ei.dataStruct.BoolPtr;
+import be.uantwerpen.fti.ei.dataStruct.PTR;
 import be.uantwerpen.fti.ei.entities.EntityType;
 
 public class LifeComp {
     int lives;
-    BoolPtr isHit, isDead;
+    PTR<Boolean> isHit, isDead;
     EntityType type;
 
-    public LifeComp(int lives, BoolPtr isHit, BoolPtr isDead, EntityType type) {
+    public LifeComp(int lives, PTR<Boolean> isHit, PTR<Boolean> isDead, EntityType type) {
         setLives(lives);
         setHit(isHit); setDead(isDead);
         setType(type);
@@ -17,14 +17,14 @@ public class LifeComp {
     public int getLives() { return lives; }
     public void setLives(int lives) { this.lives = lives; }
 
-    // public BoolPtr isHitPtr() { return isHit; }
-    public boolean isHit() { return isHit.isValue(); }
-    public void setHit(BoolPtr isHit) { this.isHit = isHit; }
+    // public PTR<Boolean> isHitPtr() { return isHit; }
+    public boolean isHit() { return isHit.getValue(); }
+    public void setHit(PTR<Boolean> isHit) { this.isHit = isHit; }
     public void setHit(boolean isHit) { this.isHit.setValue(isHit); }
 
-    // public BoolPtr isDeadPtr() { return isDead; }
-    public boolean isDead() { return isDead.isValue(); }
-    public void setDead(BoolPtr isDead) { this.isDead = isDead; }
+    // public PTR<Boolean> isDeadPtr() { return isDead; }
+    public boolean isDead() { return isDead.getValue(); }
+    public void setDead(PTR<Boolean> isDead) { this.isDead = isDead; }
     public void setDead(boolean isDead) { this.isDead.setValue(isDead); }
 
     public EntityType getType() { return type; }

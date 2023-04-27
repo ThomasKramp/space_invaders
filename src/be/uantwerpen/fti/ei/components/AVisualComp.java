@@ -1,20 +1,19 @@
 package be.uantwerpen.fti.ei.components;
 
-import be.uantwerpen.fti.ei.dataStruct.BoolPtr;
-import be.uantwerpen.fti.ei.dataStruct.IntPtr;
+import be.uantwerpen.fti.ei.dataStruct.PTR;
 
 public class AVisualComp {
-    IntPtr x, y;
+    PTR<Integer> x, y;
     int size;
 
-    public AVisualComp(IntPtr x, IntPtr y, int size) {
+    public AVisualComp(PTR<Integer> x, PTR<Integer> y, int size) {
         setX(x); setY(y);
         setSize(size);
     }
 
     public int getX() { return x.getValue(); }
 
-    public void setX(IntPtr x) {
+    public void setX(PTR<Integer> x) {
         if (x.getValue() >= 0) this.x = x;
         else this.x.setValue(0);
     }
@@ -25,7 +24,7 @@ public class AVisualComp {
 
     public int getY() { return y.getValue(); }
 
-    public void setY(IntPtr y) {
+    public void setY(PTR<Integer> y) {
         if (y.getValue() >= 0) this.y = y;
         else this.y.setValue(0); }
 
