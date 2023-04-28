@@ -26,10 +26,11 @@ public class CollisionDetector1D implements ICollisionDetector {
     public MovementComp checkCollisions(MovementComp comp, List<MovementComp> entities) {
         for (MovementComp entity: entities) {
             if (comp != entity) {
-                for (int i = 0; i < comp.getSize(); i++)
-                    if (comp.getX() + i + comp.getVx() == entity.getX()
-                    &&  comp.getY() + comp.getVy() == entity.getY())
-                        return entity;
+                for (int c = 0; c < comp.getSize(); c++)
+                    for (int e = 0; e < entity.getSize(); e++)
+                        if (comp.getX() + c + comp.getVx() == entity.getX() + e
+                        &&  comp.getY() + comp.getVy() == entity.getY())
+                            return entity;
             }
         }
         return null;
