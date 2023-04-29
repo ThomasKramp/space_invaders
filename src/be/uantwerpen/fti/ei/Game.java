@@ -248,7 +248,7 @@ public class Game {
             //region Time management
             endTime = System.nanoTime();
             // Reset bonuses
-            if ((endTime - bonusTimer) / 1000000 == 5000) {
+            if ((endTime - bonusTimer) / 1000000 >= 5000) {
                 // Remove bonuses after 5 seconds
                 boostScore = false; useRockets = false;
             }

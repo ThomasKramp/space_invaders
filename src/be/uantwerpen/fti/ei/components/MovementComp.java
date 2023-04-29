@@ -4,11 +4,11 @@ import be.uantwerpen.fti.ei.dataStruct.PTR;
 import be.uantwerpen.fti.ei.entities.EntityType;
 
 public class MovementComp {
-    protected PTR<Integer> x, y, vx, vy;
-    int size;
+    protected PTR<Integer> x, y;
+    int vx, vy, size;
     EntityType type;
 
-    public MovementComp(PTR<Integer> x, PTR<Integer> y, PTR<Integer> Vx, PTR<Integer> Vy, int size, EntityType type) {
+    public MovementComp(PTR<Integer> x, PTR<Integer> y, int Vx, int Vy, int size, EntityType type) {
         setX(x);    setY(y);
         setVx(Vx);  setVy(Vy);
         setSize(size);
@@ -31,15 +31,11 @@ public class MovementComp {
     }
     public void setY(int y) { this.x.setValue(Math.max(y, 0)); }
 
-    public PTR<Integer> getVxPtr() { return vx; }
-    public int getVx() { return vx.getValue(); }
-    public void setVx(PTR<Integer> vx) { this.vx = vx; }
-    public void setVx(int vx) { this.vx.setValue(vx); }
+    public int getVx() { return vx; }
+    public void setVx(int vx) { this.vx = vx; }
 
-    public PTR<Integer> getVyPtr() { return vy; }
-    public int getVy() { return vy.getValue(); }
-    public void setVy(PTR<Integer> vy) { this.vy = vy; }
-    public void setVy(int vy) { this.vy.setValue(vy); }
+    public int getVy() { return vy; }
+    public void setVy(int vy) { this.vy = vy; }
 
     public int getSize() { return size; }
     public void setSize(int size) { this.size = size; }

@@ -24,18 +24,18 @@ public class J2DFactory implements IFactory {
         grCtx = new GraphicsContext(screenDimen[0], screenDimen[1], 16);
     }
 
+    // TODO: Replace pointers with classes
     /*--------------------------------------------------------------------------------------------------------*/
     // Player
     @Override
     public Entity getPlayer(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.PLAYER;
         int size = 1; PTR<Integer> scale = new PTR<>(grCtx.getScale());
         int[] rgb = {192, 96, 64};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new MovementComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(5, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
@@ -43,13 +43,12 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getPBullet(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.P_BULLET;
         int size = 1; PTR<Integer> scale = new PTR<>(grCtx.getScale()/4);
         int[] rgb = {192, 96, 64};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new MovementComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(1, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
@@ -57,13 +56,12 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getPRocket(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.P_ROCKET;
         int size = 1; PTR<Integer> scale = new PTR<>(grCtx.getScale()/2);
         int[] rgb = {192, 96, 64};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new MovementComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(1, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
@@ -71,13 +69,12 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getWall(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.WALL;
         int size = 3; PTR<Integer> scale = new PTR<>(grCtx.getScale());
         int[] rgb = {128, 64, 32};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new MovementComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(20, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
@@ -88,13 +85,12 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getEnemy(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.ENEMY;
         int size = 1; PTR<Integer> scale = new PTR<>(grCtx.getScale());
         int[] rgb = {48, 96, 192};
         return new Entity(
-                new SmartMoveComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new SmartMoveComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(3, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
@@ -102,13 +98,12 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getEBullet(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.E_BULLET;
         int size = 1; PTR<Integer> scale = new PTR<>(grCtx.getScale()/4);
         int[] rgb = {48, 96, 192};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new MovementComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(1, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
@@ -116,13 +111,12 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getBoss(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.BOSS;
         int size = 4; PTR<Integer> scale = new PTR<>(grCtx.getScale());
         int[] rgb = {48, 96, 192};
         return new Entity(
-                new SmartMoveComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new SmartMoveComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(5, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
@@ -130,13 +124,12 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getBRocket(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.B_ROCKET;
         int size = 1; PTR<Integer> scale = new PTR<>(grCtx.getScale()/2);
         int[] rgb = {48, 96, 192};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new MovementComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(1, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
@@ -147,13 +140,12 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getBonusLives(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.BONUS_LIFE;
         int size = 1; PTR<Integer> scale = new PTR<>(grCtx.getScale() / 2);
         int[] rgb = {255, 0, 0};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new MovementComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(1, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
@@ -161,13 +153,12 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getBonusScore(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.BONUS_SCORE;
         int size = 1; PTR<Integer> scale = new PTR<>(grCtx.getScale() / 2);
         int[] rgb = {0, 255, 0};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new MovementComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(1, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
@@ -175,13 +166,12 @@ public class J2DFactory implements IFactory {
     @Override
     public Entity getBonusRocket(int x, int y) {
         PTR<Integer> xPtr = new PTR<>(x), yPtr = new PTR<>(y);
-        PTR<Integer> vxPtr = new PTR<>(0), vyPtr = new PTR<>(0);
         PTR<Boolean> isHit = new PTR<>(false), isBigHit = new PTR<>(false), isDead = new PTR<>(false);
         EntityType type = EntityType.BONUS_ROCKET;
         int size = 1; PTR<Integer> scale = new PTR<>(grCtx.getScale() / 2);
         int[] rgb = {0, 0, 255};
         return new Entity(
-                new MovementComp(xPtr, yPtr, vxPtr, vyPtr, size, type),
+                new MovementComp(xPtr, yPtr, 0, 0, size, type),
                 new LifeComp(1, isHit, isBigHit, isDead, type),
                 new J2DVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
         );
