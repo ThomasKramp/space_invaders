@@ -1,16 +1,15 @@
-package be.uantwerpen.fti.ei.J2D.data_oriented;
+package be.uantwerpen.fti.ei.J2D.pixels;
 
-import be.uantwerpen.fti.ei.J2D.GraphicsContext;
 import be.uantwerpen.fti.ei.components.AVisualComp;
 import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
 
 import java.awt.*;
 import java.util.List;
 
-public class J2DVisualiseSystem implements IVisualiseSystem {
-    GraphicsContext grCtx;
+public class J2DPVisualiseSystem implements IVisualiseSystem {
+    J2DPGraphicsContext grCtx;
 
-    public J2DVisualiseSystem(GraphicsContext grCtx) {
+    public J2DPVisualiseSystem(J2DPGraphicsContext grCtx) {
         this.grCtx = grCtx;
     }
 
@@ -20,7 +19,7 @@ public class J2DVisualiseSystem implements IVisualiseSystem {
         int scaleDiff = 0;
         for (AVisualComp component: components) {
             // System.out.println("X: " + component.getX() + ", Y: " + component.getY());
-            J2DVisualComp j2dComp = (J2DVisualComp) component;
+            J2DPVisualComp j2dComp = (J2DPVisualComp) component;
 
             // Set Colors
             if (j2dComp.isHit())            g2d.setColor(new Color(255 - j2dComp.getR(),255 - j2dComp.getG(),255 - j2dComp.getB())); // invert colors if hit

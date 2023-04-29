@@ -1,8 +1,5 @@
 package be.uantwerpen.fti.ei.input;
 
-import be.uantwerpen.fti.ei.J2D.GraphicsContext;
-import be.uantwerpen.fti.ei.J2D.Input;
-
 import java.util.LinkedList;
 
 public class AInput {

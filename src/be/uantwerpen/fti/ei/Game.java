@@ -122,11 +122,10 @@ public class Game {
             randomValue = (byte) (Math.random() * 255);
             for (MovementComp moveComp: moveList) {
                 // Add new entities (enemy shoots at random)
-                if (moveComp.getType() == EntityType.ENEMY) {
-                    if (randomValue % 37 == 8) entities.add(factory.getEBullet(moveComp.getX(), moveComp.getY()));
-                } else if (moveComp.getType() == EntityType.BOSS) {
-                    if (randomValue % 87 == 3) entities.add(factory.getBRocket(moveComp.getX(), moveComp.getY()));
-                }
+                if (moveComp.getType() == EntityType.ENEMY && randomValue % 37 == 8)
+                    entities.add(factory.getEBullet(moveComp.getX(), moveComp.getY()));
+                else if (moveComp.getType() == EntityType.BOSS && randomValue % 87 == 3)
+                    entities.add(factory.getBRocket(moveComp.getX() + moveComp.getSize() / 2 + 1, moveComp.getY()));
             }
             // Add bonuses
             if (randomValue % 61 == 23)         entities.add(factory.getBonusLives((int) (Math.random() * screenWidth), 0));

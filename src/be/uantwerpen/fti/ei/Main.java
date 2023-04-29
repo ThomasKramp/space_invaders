@@ -1,6 +1,6 @@
 package be.uantwerpen.fti.ei;
 
-import be.uantwerpen.fti.ei.J2D.J2DFactory;
+import be.uantwerpen.fti.ei.J2D.pixels.J2DPFactory;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
 import be.uantwerpen.fti.ei.config.ConfigReader;
 
@@ -20,7 +20,7 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        IFactory fact = new J2DFactory();
+        IFactory fact = new J2DPFactory();
         Game game = new Game(fact, config.getScreenDimen());
         game.Start();
     }

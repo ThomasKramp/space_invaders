@@ -5,12 +5,11 @@ import be.uantwerpen.fti.ei.entities.EntityType;
 
 public class MovementComp {
     protected PTR<Integer> x, y;
-    int vx, vy, size;
+    int vx = 0, vy = 0, size;
     EntityType type;
 
-    public MovementComp(PTR<Integer> x, PTR<Integer> y, int Vx, int Vy, int size, EntityType type) {
+    public MovementComp(PTR<Integer> x, PTR<Integer> y, int size, EntityType type) {
         setX(x);    setY(y);
-        setVx(Vx);  setVy(Vy);
         setSize(size);
         setType(type);
     }

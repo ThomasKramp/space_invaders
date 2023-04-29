@@ -6,8 +6,8 @@ import be.uantwerpen.fti.ei.entities.EntityType;
 public class SmartMoveComp extends MovementComp {
     byte counter;
     int direction;
-    public SmartMoveComp(PTR<Integer> x, PTR<Integer> y, int Vx, int Vy, int size, EntityType type) {
-        super(x, y, Vx, Vy, size, type);
+    public SmartMoveComp(PTR<Integer> x, PTR<Integer> y, int size, EntityType type) {
+        super(x, y, size, type);
         setCounter((byte) 0);
         setDirection(1);
     }

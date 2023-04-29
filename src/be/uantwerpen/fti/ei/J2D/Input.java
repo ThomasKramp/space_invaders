@@ -1,14 +1,14 @@
 package be.uantwerpen.fti.ei.J2D;
 
+import be.uantwerpen.fti.ei.J2D.pixels.J2DPGraphicsContext;
 import be.uantwerpen.fti.ei.input.AInput;
 import be.uantwerpen.fti.ei.input.Inputs;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.LinkedList;
 
 public class Input extends AInput {
-    public Input(GraphicsContext gr) {
+    public Input(J2DPGraphicsContext gr) {
         gr.getFrame().addKeyListener(new KeyInputAdapter());
     }
 
