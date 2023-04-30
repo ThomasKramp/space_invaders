@@ -1,14 +1,19 @@
 # Level 1 Config
 ## Player config
 player_lives=5
+player_size=1
 
 ## Enemy config
-enemy_total=13
-enemy_lives=2
+enemy_total=4
+enemy_lives=5
+enemy_size=1
 
-## Bonus config
-bonus_total=2
+## Boss config
+boss_total=1
+boss_lives=10
+boss_size=4
 
 ## Wall config
 wall_total=2
 wall_lives=20
+wall_size=3

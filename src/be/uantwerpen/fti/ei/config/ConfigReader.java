@@ -40,11 +40,19 @@ public class ConfigReader {
                 String[] setting = word.split("=");
                 switch (setting[0]) {
                     case "player_lives" -> level.setPlayerLives(Integer.parseInt(setting[1]));
+                    case "player_size"  -> level.setPlayerSize(Integer.parseInt(setting[1]));
+
                     case "enemy_total"  -> level.setEnemyTotal(Integer.parseInt(setting[1]));
                     case "enemy_lives"  -> level.setEnemyLives(Integer.parseInt(setting[1]));
-                    case "bonus_total"  -> level.setBonusTotal(Integer.parseInt(setting[1]));
+                    case "enemy_size"   -> level.setEnemySize(Integer.parseInt(setting[1]));
+
+                    case "boss_total"   -> level.setBossTotal(Integer.parseInt(setting[1]));
+                    case "boss_lives"   -> level.setBossLives(Integer.parseInt(setting[1]));
+                    case "boss_size"    -> level.setBossSize(Integer.parseInt(setting[1]));
+
                     case "wall_total"   -> level.setWallTotal(Integer.parseInt(setting[1]));
                     case "wall_lives"   -> level.setWallLives(Integer.parseInt(setting[1]));
+                    case "wall_size"    -> level.setWallSize(Integer.parseInt(setting[1]));
                 }
             }
         }

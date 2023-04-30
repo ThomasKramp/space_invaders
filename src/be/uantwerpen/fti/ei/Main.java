@@ -21,7 +21,7 @@ public class Main {
         }
 
         IFactory fact = new J2DPFactory();
-        Game game = new Game(fact, config.getScreenDimen());
+        Game game = new Game(fact, config.getScreenDimen(), config.getLevels());
         game.Start();
     }
 }

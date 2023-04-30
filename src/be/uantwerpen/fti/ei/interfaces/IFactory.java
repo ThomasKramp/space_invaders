@@ -10,16 +10,16 @@ public interface IFactory {
 
     /*--------------------------------------------------------------------------------------------------------*/
     // Player
-    Entity getPlayer(int x, int y);
+    Entity getPlayer(int x, int y, int lives, int size);
     Entity getPBullet(int x, int y);
     Entity getPRocket(int x, int y);
-    public Entity getWall(int x, int y);
+    public Entity getWall(int x, int y, int lives, int size);
 
     /*--------------------------------------------------------------------------------------------------------*/
     // Enemies
-    Entity getEnemy(int x, int y);
+    Entity getEnemy(int x, int y, int lives, int size);
     Entity getEBullet(int x, int y);
-    Entity getBoss(int x, int y);
+    Entity getBoss(int x, int y, int lives, int size);
     Entity getBRocket(int x, int y);
 
     /*--------------------------------------------------------------------------------------------------------*/

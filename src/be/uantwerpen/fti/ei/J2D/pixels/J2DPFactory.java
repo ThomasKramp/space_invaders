@@ -48,9 +48,9 @@ public class J2DPFactory implements IFactory {
     /*--------------------------------------------------------------------------------------------------------*/
     //region Player
     @Override
-    public Entity getPlayer(int x, int y) {
+    public Entity getPlayer(int x, int y, int lives, int size) {
         int[] rgb = {192, 96, 64};
-        return CreateEntity(x, y, 1, EntityType.PLAYER, 5, grCtx.getScale(), rgb);
+        return CreateEntity(x, y, size, EntityType.PLAYER, lives, grCtx.getScale(), rgb);
     }
     @Override
     public Entity getPBullet(int x, int y) {
@@ -63,17 +63,17 @@ public class J2DPFactory implements IFactory {
         return CreateEntity(x, y, 1, EntityType.P_ROCKET, 1, grCtx.getScale()/2, rgb);
     }
     @Override
-    public Entity getWall(int x, int y) {
+    public Entity getWall(int x, int y, int lives, int size) {
         int[] rgb = {128, 64, 32};
-        return CreateEntity(x, y, 3, EntityType.WALL, 20, grCtx.getScale(), rgb);
+        return CreateEntity(x, y, size, EntityType.WALL, lives, grCtx.getScale(), rgb);
     }
     //endregion
     /*--------------------------------------------------------------------------------------------------------*/
     //region Enemies
     @Override
-    public Entity getEnemy(int x, int y) {
+    public Entity getEnemy(int x, int y, int lives, int size) {
         int[] rgb = {48, 96, 192};
-        return CreateSmartEntity(x, y, 1, EntityType.ENEMY, 3, grCtx.getScale(), rgb);
+        return CreateSmartEntity(x, y, size, EntityType.ENEMY, lives, grCtx.getScale(), rgb);
     }
     @Override
     public Entity getEBullet(int x, int y) {
@@ -81,9 +81,9 @@ public class J2DPFactory implements IFactory {
         return CreateEntity(x, y, 1, EntityType.E_BULLET, 1, grCtx.getScale()/4, rgb);
     }
     @Override
-    public Entity getBoss(int x, int y) {
+    public Entity getBoss(int x, int y, int lives, int size) {
         int[] rgb = {48, 96, 192};
-        return CreateSmartEntity(x, y, 4, EntityType.BOSS, 5, grCtx.getScale(), rgb);
+        return CreateSmartEntity(x, y, size, EntityType.BOSS, lives, grCtx.getScale(), rgb);
     }
     @Override
     public Entity getBRocket(int x, int y) {

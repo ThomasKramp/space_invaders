@@ -12,7 +12,7 @@ public class LifeSystem {
             if (component.isHit())          lives = lives - 1;
             else if (component.isBigHit())  lives = lives - 3;
             else if (component.isDead())    lives = 0;
-            if (lives == 0) component.setDead(true);
+            if (lives <= 0) component.setDead(true);
             component.setLives(lives);
         }
     }
