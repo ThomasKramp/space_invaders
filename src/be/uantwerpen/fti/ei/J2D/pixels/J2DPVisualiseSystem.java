@@ -1,5 +1,6 @@
 package be.uantwerpen.fti.ei.J2D.pixels;
 
+import be.uantwerpen.fti.ei.J2D.GraphicsContext;
 import be.uantwerpen.fti.ei.components.AVisualComp;
 import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
 
@@ -7,16 +8,16 @@ import java.awt.*;
 import java.util.List;
 
 public class J2DPVisualiseSystem implements IVisualiseSystem {
-    J2DPGraphicsContext grCtx;
+    GraphicsContext grCtx;
 
-    public J2DPVisualiseSystem(J2DPGraphicsContext grCtx) {
+    public J2DPVisualiseSystem(GraphicsContext grCtx) {
         this.grCtx = grCtx;
     }
 
     @Override
     public void visualise(List<AVisualComp> components) {
         Graphics2D g2d = grCtx.getG2d();
-        int scaleDiff = 0;
+        int scaleDiff;
         for (AVisualComp component: components) {
             // System.out.println("X: " + component.getX() + ", Y: " + component.getY());
             J2DPVisualComp j2dComp = (J2DPVisualComp) component;

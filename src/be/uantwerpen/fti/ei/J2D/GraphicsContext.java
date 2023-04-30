@@ -1,4 +1,4 @@
-package be.uantwerpen.fti.ei.J2D.pixels;
+package be.uantwerpen.fti.ei.J2D;
 
 import be.uantwerpen.fti.ei.interfaces.IHotBar;
 
@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class J2DPGraphicsContext implements IHotBar {
+public class GraphicsContext implements IHotBar {
     private JFrame frame;
     private JPanel panel;
     private BufferedImage g2dImage;     // used for drawing
@@ -22,7 +22,7 @@ public class J2DPGraphicsContext implements IHotBar {
     }
     public int getScale() { return scale; }
 
-    public J2DPGraphicsContext(int width, int height, int scale) {
+    public GraphicsContext(int width, int height, int scale) {
         this.scale = scale;
 
         frame = new JFrame();

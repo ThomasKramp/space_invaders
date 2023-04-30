@@ -4,7 +4,7 @@ player_lives=5
 player_size=1
 
 ## Enemy config
-enemy_total=4
+enemy_total=15
 enemy_lives=5
 enemy_size=1
 
@@ -14,6 +14,6 @@ boss_lives=10
 boss_size=4
 
 ## Wall config
-wall_total=5
+wall_total=2
 wall_lives=20
 wall_size=3

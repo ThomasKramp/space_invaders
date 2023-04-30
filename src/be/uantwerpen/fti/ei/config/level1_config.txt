@@ -4,7 +4,7 @@ player_lives=5
 player_size=1
 
 ## Enemy config
-enemy_total=4
+enemy_total=15
 enemy_lives=5
 enemy_size=1
 

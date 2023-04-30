@@ -1,6 +1,5 @@
 package be.uantwerpen.fti.ei.J2D;
 
-import be.uantwerpen.fti.ei.J2D.pixels.J2DPGraphicsContext;
 import be.uantwerpen.fti.ei.input.AInput;
 import be.uantwerpen.fti.ei.input.Inputs;
 
@@ -8,7 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class Input extends AInput {
-    public Input(J2DPGraphicsContext gr) {
+    public Input(GraphicsContext gr) {
         gr.getFrame().addKeyListener(new KeyInputAdapter());
     }
 

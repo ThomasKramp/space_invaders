@@ -81,7 +81,7 @@ public class Game {
             // Boss
             // TODO: Remove 4 boss bug
             List<Entity> bosses = new ArrayList<>();
-            xStart = screenWidth / 3; yStart = screenHeight / 8; rowTotal = 0;
+            xStart = screenWidth; yStart = screenHeight / 8; rowTotal = 0;
             while (bosses.size() < level.getBossTotal()) {
                 if (xStart >= screenWidth / 3 * 2) {
                     offset = level.getBossSize() * (level.getBossTotal() % 2 == 0 ? 1 : (yStart % 2));
