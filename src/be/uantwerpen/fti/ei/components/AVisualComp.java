@@ -18,9 +18,7 @@ public class AVisualComp {
         else this.x.setValue(0);
     }
 
-    public void setX(int x) {
-        this.x.setValue(Math.max(x, 0));
-    }
+    public void setX(int x) { this.x.setValue(Math.max(x, 0)); }
 
     public int getY() { return y.getValue(); }
 

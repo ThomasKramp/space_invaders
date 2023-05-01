@@ -6,3 +6,7 @@ screen_height=24
 ## level files
 level1_config=level1_config.txt
 level2_config=level2_config.txt
+
+## Player config
+player_lives=5
+player_size=1

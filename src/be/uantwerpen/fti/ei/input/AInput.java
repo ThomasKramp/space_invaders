@@ -3,11 +3,8 @@ package be.uantwerpen.fti.ei.input;
 import java.util.LinkedList;
 
 public class AInput {
-    protected LinkedList<Inputs> keyInputs;
+    protected LinkedList<Inputs> keyInputs = new LinkedList<>();;
 
-    public AInput() {
-        keyInputs = new LinkedList<Inputs>();
-    }
     public boolean inputAvailable() {
         return keyInputs.size() > 0;
     }

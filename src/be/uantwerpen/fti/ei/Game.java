@@ -17,13 +17,11 @@ import java.util.stream.Collectors;
 public class Game {
     private final IFactory factory;
     private final AInput input;
+    private final Entity player;
     private final List<Entity>[] levelEntities;
-    private boolean isRunning = true, isPaused = false;
-    private int score = 0;
     private final int screenWidth, screenHeight;
-    long startTime, endTime, duration;
 
-    public Game(IFactory fact, int[] screenDimen, List<LevelConfig> levels) {
+    public Game(IFactory fact, int[] screenDimen, int[] playerConfig, List<LevelConfig> levels) {
         // Initiate Factory
         this.factory = fact;
         this.factory.setScreenDimensions(screenDimen);
@@ -32,6 +30,9 @@ public class Game {
         // Set screen dimensions
         this.screenWidth = screenDimen[0];
         this.screenHeight = screenDimen[1];
+
+        // Player
+        player = factory.getPlayer(screenWidth / 2 - 1, screenHeight * 5 / 6, playerConfig[0], playerConfig[1]);
 
         // Initiate levels
         levelEntities = new List[levels.size()];
@@ -42,10 +43,6 @@ public class Game {
         for (LevelConfig level: levels) {
             List<Entity> entities = new ArrayList<>();
             int xStart, yStart, rowTotal, offset;
-
-            // Player
-            Entity player = factory.getPlayer(screenWidth / 2 - 1, screenHeight * 5 / 6, level.getPlayerLives(), level.getPlayerSize());
-            entities.add(player);
 
             // Enemies
             List<Entity> enemies = new ArrayList<>();
@@ -103,7 +100,7 @@ public class Game {
             entities.addAll(bosses);
 
             // Walls
-            // TODO: Make randomised wall plasment
+            // TODO: Make randomised wall placement
             List<Entity> walls = new ArrayList<>();
             xStart = screenWidth / 3; yStart = screenHeight * 4 / 6; rowTotal = 0;
             while (walls.size() < level.getWallTotal()) {
@@ -240,6 +237,10 @@ public class Game {
         IHotBar hotBarHandler = factory.getHotBarHandler();
 
         // Variables
+        boolean isRunning = true, isPaused = false;
+        long startTime, endTime, duration;
+        int score = 0;
+
         long bonusTimer = 0;            // Variable to keep bonus time in check (Time management)
         boolean boostScore = false;     // Boolean for score increment adjustment (Entity filtering)
         boolean useRockets = false;     // Boolean for activation of rockets (Input handling)
@@ -250,10 +251,8 @@ public class Game {
 
         // Levels
         for (List<Entity> entities: levelEntities) {
-            isRunning = true;
 
-            Entity player = entities.stream().filter(entity -> entity.getMovementComp().getType() == EntityType.PLAYER).findFirst().orElse(null);
-            if (player == null) continue;
+            entities.add(player);
 
             startTime = System.nanoTime();
             while (isRunning) {

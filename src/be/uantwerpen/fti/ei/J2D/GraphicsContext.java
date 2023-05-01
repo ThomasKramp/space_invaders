@@ -7,12 +7,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class GraphicsContext implements IHotBar {
-    private JFrame frame;
-    private JPanel panel;
-    private BufferedImage g2dImage;     // used for drawing
-    private Graphics2D g2d;             // always draw in this one
-
-    private int scale;
+    private final JFrame frame;
+    private final JPanel panel;
+    private final BufferedImage g2dImage;
+    private final Graphics2D g2d;
+    private final int scale;
 
     public Graphics2D getG2d() {
         return g2d;

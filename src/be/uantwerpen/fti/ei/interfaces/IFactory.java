@@ -13,7 +13,7 @@ public interface IFactory {
     Entity getPlayer(int x, int y, int lives, int size);
     Entity getPBullet(int x, int y);
     Entity getPRocket(int x, int y);
-    public Entity getWall(int x, int y, int lives, int size);
+    Entity getWall(int x, int y, int lives, int size);
 
     /*--------------------------------------------------------------------------------------------------------*/
     // Enemies

@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigReader {
-    private int[] screenDimen = new int[2];
-    private List<LevelConfig> levels = new ArrayList<>();
+    private final int[] screenDimen = new int[2];
+    private final int[] playerConfig = new int[2];
+    private final List<LevelConfig> levels = new ArrayList<>();
 
     // https://www.geeksforgeeks.org/different-ways-reading-text-file-java/
     public void getScreenSettings(String path) throws IOException {
@@ -19,12 +20,14 @@ public class ConfigReader {
             String[] words = config.split("\n");
             for (String word: words) {
                 String[] setting = word.split("=");
-                if (setting[0].equals("screen_width"))
-                    screenDimen[0] = Integer.parseInt(setting[1]);
-                else if (setting[0].equals("screen_height"))
-                    screenDimen[1] = Integer.parseInt(setting[1]);
-                else if (setting[0].contains("level") && setting[0].contains("config"))
-                    addLevel(path, setting[1]);
+                if (setting[0].contains("level") && setting[0].contains("config")) addLevel(path, setting[1]);
+                else switch (setting[0]) {
+                    case "screen_width"     -> screenDimen[0] = Integer.parseInt(setting[1]);
+                    case "screen_height"    -> screenDimen[1] = Integer.parseInt(setting[1]);
+
+                    case "player_lives"     -> playerConfig[0] = Integer.parseInt(setting[1]);
+                    case "player_size"      -> playerConfig[1] = Integer.parseInt(setting[1]);
+                }
             }
         }
     }
@@ -39,9 +42,6 @@ public class ConfigReader {
             for (String word: words) {
                 String[] setting = word.split("=");
                 switch (setting[0]) {
-                    case "player_lives" -> level.setPlayerLives(Integer.parseInt(setting[1]));
-                    case "player_size"  -> level.setPlayerSize(Integer.parseInt(setting[1]));
-
                     case "enemy_total"  -> level.setEnemyTotal(Integer.parseInt(setting[1]));
                     case "enemy_lives"  -> level.setEnemyLives(Integer.parseInt(setting[1]));
                     case "enemy_size"   -> level.setEnemySize(Integer.parseInt(setting[1]));
@@ -60,5 +60,6 @@ public class ConfigReader {
     }
 
     public int[] getScreenDimen() { return screenDimen; }
+    public int[] getPlayerConfig() { return playerConfig; }
     public List<LevelConfig> getLevels() { return levels; }
 }

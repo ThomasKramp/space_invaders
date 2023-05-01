@@ -21,9 +21,24 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        //IFactory fact = new J2DPFactory();
-        IFactory fact = new J2DIFactory();
-        Game game = new Game(fact, config.getScreenDimen(), config.getLevels());
+        IFactory fact;
+        //fact = new J2DPFactory();
+        fact = new J2DIFactory();
+        Game game = new Game(fact, config.getScreenDimen(), config.getPlayerConfig(), config.getLevels());
         game.Start();
     }
+
+    /**
+     * @author      Specifies author
+     * @deprecated  Specifies deprecation
+     * @exception   Specifies exception thrown
+     * @link        Creates an in line hyperlink
+     * @param       Method parameter
+     * @return      Return value
+     * @see         Creates a hyperlink
+     * @since       Specifies version introduced
+     * @throws      Same as @exception
+     * @version     States current version
+     * @see         reference
+     */
 }

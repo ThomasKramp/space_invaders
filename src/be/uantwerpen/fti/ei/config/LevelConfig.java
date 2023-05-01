@@ -2,13 +2,6 @@ package be.uantwerpen.fti.ei.config;
 
 public class LevelConfig {
 
-    // Player
-    int player_lives = 0, player_size = 0;
-    public int getPlayerLives() { return player_lives; }
-    public void setPlayerLives(int player_lives) { this.player_lives = player_lives; }
-    public int getPlayerSize() { return player_size; }
-    public void setPlayerSize(int player_size) { this.player_size = player_size; }
-
     // Enemy
     int enemy_total = 0, enemy_lives = 0, enemy_size = 0;
     public int getEnemyTotal() { return enemy_total; }

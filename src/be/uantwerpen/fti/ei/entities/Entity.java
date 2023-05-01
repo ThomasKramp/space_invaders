@@ -9,6 +9,7 @@ public class Entity {
     LifeComp lifeComp;
     AVisualComp visualComp;
 
+    public Entity() {}
     public Entity(MovementComp movementComp, LifeComp lifeComp, AVisualComp visualComp) {
         this.movementComp = movementComp;
         this.lifeComp = lifeComp;
