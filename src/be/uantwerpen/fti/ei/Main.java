@@ -26,7 +26,7 @@ public class Main {
         fact = new J2DIFactory();
         Game game = new Game(fact, config.getScreenDimen(), config.getPlayerConfig(), config.getLevels());
         game.Start();
-    }
+     }
 
     /**
      * @author      Specifies author

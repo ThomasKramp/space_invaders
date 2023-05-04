@@ -60,9 +60,11 @@ public class GraphicsContext implements IHotBar {
     }
 
     public void updateScore(int score) {
+        g2d.setColor(new Color(224,224,224));
         g2d.drawString("Score: " + score, 0, frame.getHeight() - 64);
     }
     public void updateHealth(int health) {
+        g2d.setColor(new Color(224,224,224));
         g2d.drawString("Health: " + health, 64, frame.getHeight() - 64);
     }
 

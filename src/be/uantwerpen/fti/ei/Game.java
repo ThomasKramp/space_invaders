@@ -253,6 +253,7 @@ public class Game {
         for (List<Entity> entities: levelEntities) {
 
             entities.add(player);
+            isRunning = true;
 
             startTime = System.nanoTime();
             while (isRunning) {
