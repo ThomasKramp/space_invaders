@@ -1,6 +1,6 @@
-package be.uantwerpen.fti.ei.input;
+package be.uantwerpen.fti.ei.enums;
 
-public enum Inputs {
+public enum InputType {
     LEFT,
     RIGHT,
     UP,

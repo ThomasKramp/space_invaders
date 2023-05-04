@@ -1,13 +1,14 @@
 package be.uantwerpen.fti.ei;
 
 import be.uantwerpen.fti.ei.config.LevelConfig;
-import be.uantwerpen.fti.ei.entities.EntityType;
+import be.uantwerpen.fti.ei.enums.BonusType;
+import be.uantwerpen.fti.ei.enums.EntityType;
+import be.uantwerpen.fti.ei.enums.GameState;
 import be.uantwerpen.fti.ei.interfaces.ICollisionDetector;
-import be.uantwerpen.fti.ei.interfaces.IHotBar;
 import be.uantwerpen.fti.ei.components.*;
 import be.uantwerpen.fti.ei.entities.Entity;
 import be.uantwerpen.fti.ei.input.AInput;
-import be.uantwerpen.fti.ei.input.Inputs;
+import be.uantwerpen.fti.ei.enums.InputType;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
 import be.uantwerpen.fti.ei.systems.*;
 
@@ -234,228 +235,269 @@ public class Game {
         ICollisionDetector colDet = factory.getCollisionDetector(screenWidth, screenHeight);
         LifeSystem life = new LifeSystem();
         IVisualiseSystem visualiser = factory.getVisualiseSystem();
-        IHotBar hotBarHandler = factory.getHotBarHandler();
 
         // Variables
-        boolean isRunning = true, isPaused = false;
-        long startTime, endTime, duration;
+        GameState state = GameState.RUN;
+        long startTime = System.nanoTime(), endTime, duration;
         int score = 0;
 
         long bonusTimer = 0;            // Variable to keep bonus time in check (Time management)
-        boolean boostScore = false;     // Boolean for score increment adjustment (Entity filtering)
-        boolean useRockets = false;     // Boolean for activation of rockets (Input handling)
+        BonusType bonus = BonusType.NONE;
 
         byte randomValue;               // Random for entity creation (Entity creation)
         boolean enemyAdvance = false;   // Boolean for enemy advancement (Entity movement)
         boolean bossAdvance = false;    // Boolean for boss advancement (Entity movement)
 
-        // Levels
-        for (List<Entity> entities: levelEntities) {
+        int levelIndex = 1;
+        List<Entity> entities = levelEntities[0];
+        entities.add(player);
 
-            entities.add(player);
-            isRunning = true;
-
-            startTime = System.nanoTime();
-            while (isRunning) {
-                sleep(50);
+        while (state != GameState.END) {
+            sleep(50);
+            switch (state) {
                 /*----------------------------------------------------------------------------------------------------*/
-                //region Input handling
-                if (input.inputAvailable()) {
-                    Inputs direction = input.getInput();
-                    if (direction == Inputs.ESCAPE) {
-                        isRunning = false;
-                        visualiser.end();
-                        return;
+                case GAME_WON   -> {
+                    // Input handling
+                    if (input.inputAvailable()) {
+                        InputType direction = input.getInput();
+                        if (direction == InputType.ESCAPE) state = GameState.END; // Stop
                     }
-                    else if (direction == Inputs.SPACE) {
-                        if (useRockets) entities.add(factory.getPRocket(player.getMovementComp().getX(), player.getMovementComp().getY()));
-                        else            entities.add(factory.getPBullet(player.getMovementComp().getX(), player.getMovementComp().getY()));
-                    } else
+                    // Visualisation
+                    visualiser.visualise("Victory!!!",
+                            "Press Enter to Leave",
+                            "Score: " + score + " - Health: " + player.getLifeComp().getLives()
+                    );
+                }
+                /*----------------------------------------------------------------------------------------------------*/
+                case GAME_OVER  -> {
+                    // Input handling
+                    if (input.inputAvailable()) {
+                        InputType direction = input.getInput();
+                        if (direction == InputType.ESCAPE) state = GameState.END; // Stop
+                    }
+                    // Visualisation
+                    visualiser.visualise("Game Over!!!", "Press Enter to Leave", "Score: " + score);
+                }
+                /*----------------------------------------------------------------------------------------------------*/
+                case NEXT       -> {
+                    // Get new entities
+                    entities = levelEntities[levelIndex];
+                    entities.add(player);
+
+                    // Start new level or end game
+                    levelIndex++;
+                    if (levelIndex == levelEntities.length) state = GameState.GAME_WON;
+                    else                                    state = GameState.RUN;
+                }
+                /*----------------------------------------------------------------------------------------------------*/
+                case PAUSE      -> {
+                    // Input handling
+                    if (input.inputAvailable()) {
+                        InputType direction = input.getInput();
                         switch (direction) {
-                            case LEFT  -> { player.getMovementComp().setVx(-1); player.getMovementComp().setVy(0); }
-                            case RIGHT -> { player.getMovementComp().setVx(1); player.getMovementComp().setVy(0); }
-                            case DOWN  -> { player.getMovementComp().setVx(0); player.getMovementComp().setVy(1); }
-                            case UP    -> { player.getMovementComp().setVx(0); player.getMovementComp().setVy(-1); }
+                            case ESCAPE -> state = GameState.END; // Stop
+                            case SPACE  -> state = GameState.RUN; // Continue
                         }
+                    }
+                    // Visualisation
+                    visualiser.visualise("Paused",
+                            "Press Enter to continue",
+                            "Press Esc to leave",
+                            "Score: " + score + " - Health: " + player.getLifeComp().getLives()
+                    );
                 }
-                //endregion
                 /*----------------------------------------------------------------------------------------------------*/
-                //region List initialization
-                // Move
-                List<MovementComp> moveList = entities.stream()
-                        .map(Entity::getMovementComp)
-                        .collect(Collectors.toList());
-                // Life
-                List<LifeComp> lifeList = entities.stream()
-                        .map(Entity::getLifeComp)
-                        .collect(Collectors.toList());
-                // Visualise
-                List<AVisualComp> visualList = entities.stream()
-                        .map(Entity::getVisualComp)
-                        .collect(Collectors.toList());
-                //endregion
-                /*----------------------------------------------------------------------------------------------------*/
-                //region Entity creation
-                randomValue = (byte) (Math.random() * 255);
-                for (MovementComp moveComp: moveList) {
-                    // Add new entities (enemy shoots at random)
-                    if (moveComp.getType() == EntityType.ENEMY && randomValue % 37 == 8)
-                        entities.add(factory.getEBullet(moveComp.getX(), moveComp.getY()));
-                    else if (moveComp.getType() == EntityType.BOSS && randomValue % 87 == 3)
-                        entities.add(factory.getBRocket(moveComp.getX() + moveComp.getSize() / 2 + 1, moveComp.getY()));
-                }
-                // Add bonuses
-                if (randomValue % 61 == 23)         entities.add(factory.getBonusLives((int) (Math.random() * screenWidth), 0));
-                else if (randomValue % 61 == 29)    entities.add(factory.getBonusScore((int) (Math.random() * screenWidth), 0));
-                else if (randomValue % 61 == 31)    entities.add(factory.getBonusRocket((int) (Math.random() * screenWidth), 0));
-                //endregion
-                /*----------------------------------------------------------------------------------------------------*/
-                //region Entity collision detection
-                for (MovementComp moveComp: moveList) {
-                    // Collision detection (walls)
-                    if (colDet.checkVerticalWallCollisions(moveComp)) {
-                        // All entities should stop if they hit the walls
-                        moveComp.setVx(0);
-                        // Enemy entities should advance if one hits the walls
+                case RUN        -> {
+                    /*------------------------------------------------------------------------------------------------*/
+                    //region Input handling
+                    if (input.inputAvailable()) {
+                        InputType direction = input.getInput();
+                        switch (direction) {
+                            // Game state
+                            case ESCAPE -> { state = GameState.PAUSE; }
+                            // Shooting
+                            case SPACE  -> {
+                                if (bonus == BonusType.USE_ROCKET)
+                                    entities.add(factory.getPRocket(player.getMovementComp().getX(), player.getMovementComp().getY()));
+                                else    entities.add(factory.getPBullet(player.getMovementComp().getX(), player.getMovementComp().getY()));
+                            }
+                            // Directions
+                            case LEFT   -> { player.getMovementComp().setVx(-1); player.getMovementComp().setVy(0); }
+                            case RIGHT  -> { player.getMovementComp().setVx(1); player.getMovementComp().setVy(0); }
+                            case DOWN   -> { player.getMovementComp().setVx(0); player.getMovementComp().setVy(1); }
+                            case UP     -> { player.getMovementComp().setVx(0); player.getMovementComp().setVy(-1); }
+                        }
+                    }
+                    //endregion
+                    /*------------------------------------------------------------------------------------------------*/
+                    //region List initialization
+                    // Move
+                    List<MovementComp> moveList = entities.stream()
+                            .map(Entity::getMovementComp)
+                            .collect(Collectors.toList());
+                    // Life
+                    List<LifeComp> lifeList = entities.stream()
+                            .map(Entity::getLifeComp)
+                            .collect(Collectors.toList());
+                    // Visualise
+                    List<AVisualComp> visualList = entities.stream()
+                            .map(Entity::getVisualComp)
+                            .collect(Collectors.toList());
+                    //endregion
+                    /*------------------------------------------------------------------------------------------------*/
+                    //region Entity creation
+                    randomValue = (byte) (Math.random() * 255);
+                    for (MovementComp moveComp: moveList) {
+                        // Add new entities (enemy shoots at random)
+                        if (moveComp.getType() == EntityType.ENEMY && randomValue % 37 == 8)
+                            entities.add(factory.getEBullet(moveComp.getX(), moveComp.getY()));
+                        else if (moveComp.getType() == EntityType.BOSS && randomValue % 87 == 3)
+                            entities.add(factory.getBRocket(moveComp.getX() + moveComp.getSize() / 2 + 1, moveComp.getY()));
+                    }
+                    // Add bonuses
+                    if (randomValue % 61 == 23)         entities.add(factory.getBonusLives((int) (Math.random() * screenWidth), 0));
+                    else if (randomValue % 61 == 29)    entities.add(factory.getBonusScore((int) (Math.random() * screenWidth), 0));
+                    else if (randomValue % 61 == 31)    entities.add(factory.getBonusRocket((int) (Math.random() * screenWidth), 0));
+                    //endregion
+                    /*------------------------------------------------------------------------------------------------*/
+                    //region Entity collision detection
+                    for (MovementComp moveComp: moveList) {
+                        // Collision detection (walls)
+                        if (colDet.checkVerticalWallCollisions(moveComp)) {
+                            // All entities should stop if they hit the walls
+                            moveComp.setVx(0);
+                            // Enemy entities should advance if one hits the walls
+                            if (moveComp.getType() == EntityType.ENEMY) {
+                                enemyAdvance = true;
+                                moveList.forEach(enemy -> { if (enemy.getType() == EntityType.ENEMY) enemy.setVx(0); });
+                            } else if (moveComp.getType() == EntityType.BOSS) {
+                                bossAdvance = true;
+                                moveList.forEach(enemy -> { if (enemy.getType() == EntityType.BOSS) enemy.setVx(0); });
+                            }
+                        }
+                        if (colDet.checkHorizontalWallCollisions(moveComp)) {
+                            moveComp.setVy(0);
+                            // Set entity ass dead if they hit the bottom or top walls
+                            entities.stream().filter(entity -> entity.getMovementComp().equals(moveComp))
+                                    .findFirst()
+                                    .ifPresent(entity -> entity.getLifeComp().setDead(true));
+                        }
+
+                        // Collision detection (entities)
+                        final MovementComp collider = colDet.checkCollisions(moveComp, moveList);
+                        if (collider != null) {
+                            Optional<Entity> moverEnt, colliderEnt;
+                            // Search for mover
+                            moverEnt = entities.stream().filter(entity -> entity.getMovementComp().equals(moveComp)).findFirst();
+                            // Search for collider
+                            colliderEnt = entities.stream().filter(entity -> entity.getMovementComp().equals(collider)).findFirst();
+                            // Use Collider
+                            if (moverEnt.isPresent() && colliderEnt.isPresent())
+                                if (!checkHits(moverEnt.get().getLifeComp(), colliderEnt.get().getLifeComp())) {
+                                    moveComp.setVx(0);
+                                    moveComp.setVy(0);
+                                }
+                        }
+                    }
+                    //endregion
+                    /*------------------------------------------------------------------------------------------------*/
+                    //region Entity movement
+                    mover.update(moveList);
+                    for (MovementComp moveComp: moveList) {
+                        // Enemy movement
                         if (moveComp.getType() == EntityType.ENEMY) {
-                            enemyAdvance = true;
-                            moveList.forEach(enemy -> { if (enemy.getType() == EntityType.ENEMY) enemy.setVx(0); });
-                        } else if (moveComp.getType() == EntityType.BOSS) {
-                            bossAdvance = true;
-                            moveList.forEach(enemy -> { if (enemy.getType() == EntityType.BOSS) enemy.setVx(0); });
-                        }
-                    }
-                    if (colDet.checkHorizontalWallCollisions(moveComp)) {
-                        moveComp.setVy(0);
-                        // Set entity ass dead if they hit the bottom or top walls
-                        entities.stream().filter(entity -> entity.getMovementComp().equals(moveComp))
-                                .findFirst()
-                                .ifPresent(entity -> entity.getLifeComp().setDead(true));
-                    }
-
-                    // Collision detection (entities)
-                    final MovementComp collider = colDet.checkCollisions(moveComp, moveList);
-                    if (collider != null) {
-                        Optional<Entity> moverEnt, colliderEnt;
-                        // Search for mover
-                        moverEnt = entities.stream().filter(entity -> entity.getMovementComp().equals(moveComp)).findFirst();
-                        // Search for collider
-                        colliderEnt = entities.stream().filter(entity -> entity.getMovementComp().equals(collider)).findFirst();
-                        // Use Collider
-                        if (moverEnt.isPresent() && colliderEnt.isPresent())
-                            if (!checkHits(moverEnt.get().getLifeComp(), colliderEnt.get().getLifeComp())) {
-                                moveComp.setVx(0);
-                                moveComp.setVy(0);
-                            }
-                    }
-                }
-                //endregion
-                /*----------------------------------------------------------------------------------------------------*/
-                //region Entity movement
-                mover.update(moveList);
-                for (MovementComp moveComp: moveList) {
-                    // Enemy movement
-                    if (moveComp.getType() == EntityType.ENEMY) {
-                        if (enemyAdvance) {
-                            assert moveComp instanceof SmartMoveComp;
-                            SmartMoveComp SComp = (SmartMoveComp) moveComp;
-                            SComp.setVx(0); SComp.setVy(1);
-                            SComp.setDirection(-SComp.getDirection());
-                        }
-                    }
-
-                    // Boss movement
-                    if (moveComp.getType() == EntityType.BOSS) {
-                        if (bossAdvance) {
-                            assert moveComp instanceof SmartMoveComp;
-                            SmartMoveComp SComp = (SmartMoveComp) moveComp;
-                            SComp.setVx(0); SComp.setVy(1);
-                            SComp.setDirection(-SComp.getDirection());
-                        }
-                    }
-
-                    // Bullet movement
-                    else if (moveComp.getType() == EntityType.P_BULLET) moveComp.setVy(-1);
-                    else if (moveComp.getType() == EntityType.P_ROCKET) moveComp.setVy(-1);
-                    else if (moveComp.getType() == EntityType.E_BULLET) moveComp.setVy(1);
-                    else if (moveComp.getType() == EntityType.B_ROCKET) moveComp.setVy(1);
-
-                        // Bonus movement
-                    else if (moveComp.getType() == EntityType.BONUS_LIFE)   moveComp.setVy(1);
-                    else if (moveComp.getType() == EntityType.BONUS_SCORE)  moveComp.setVy(1);
-                    else if (moveComp.getType() == EntityType.BONUS_ROCKET) moveComp.setVy(1);
-
-                    // Enemy & Boss movement
-                    if (moveComp instanceof SmartMoveComp SComp) {
-                        if ((SComp.getCounter() + 1) % 4 == 0) {
-                            moveComp.setVx(SComp.getDirection());
-                        }
-                        SComp.setCounter((byte) (SComp.getCounter() + 1));
-                    }
-                }
-                //endregion
-                /*----------------------------------------------------------------------------------------------------*/
-                //region Entity filtering (based on lives)
-                life.checkLives(lifeList);
-                for (LifeComp lifeComp: lifeList) {
-                    // Filter death entities
-                    if (lifeComp.isDead()) {
-                        // Change score
-                        if (lifeComp.getType() == EntityType.ENEMY)     score += (boostScore ? 3 : 1);
-                        else if (lifeComp.getType() == EntityType.BOSS) score += (boostScore ? 7 : 4);
-                            // Only apply bonuses on hits
-                        else if (lifeComp.isHit() || lifeComp.isBigHit()) {
-                            if (lifeComp.getType() == EntityType.BONUS_LIFE)
-                                player.getLifeComp().setLives(player.getLifeComp().getLives() + 3);
-                            else if (lifeComp.getType() == EntityType.BONUS_SCORE) {
-                                bonusTimer = System.nanoTime();
-                                boostScore = true; useRockets = false;
-                            } else if (lifeComp.getType() == EntityType.BONUS_ROCKET) {
-                                bonusTimer = System.nanoTime();
-                                boostScore = false; useRockets = true;
+                            if (enemyAdvance) {
+                                assert moveComp instanceof SmartMoveComp;
+                                SmartMoveComp SComp = (SmartMoveComp) moveComp;
+                                SComp.setVx(0); SComp.setVy(1);
+                                SComp.setDirection(-SComp.getDirection());
                             }
                         }
-                        // Remove dead entity
-                        entities.stream().filter(entity -> entity.getLifeComp().equals(lifeComp))
-                                .findFirst()
-                                .ifPresent(entities::remove);
-                    }
-                }
-                //endregion
-                /*----------------------------------------------------------------------------------------------------*/
-                //region Visualisation
-                // Update hot-bar
-                hotBarHandler.updateScore(score);
-                hotBarHandler.updateHealth(player.getLifeComp().getLives());
 
-                // Visualise
-                visualiser.visualise(visualList);
-                //endregion
-                /*----------------------------------------------------------------------------------------------------*/
-                //region Reset
-                life.resetHits(lifeList);
-                if (player.getLifeComp().getLives() <= 0) {
-                    isRunning = false;
-                    visualiser.end();
-                    return;
+                        // Boss movement
+                        if (moveComp.getType() == EntityType.BOSS) {
+                            if (bossAdvance) {
+                                assert moveComp instanceof SmartMoveComp;
+                                SmartMoveComp SComp = (SmartMoveComp) moveComp;
+                                SComp.setVx(0); SComp.setVy(1);
+                                SComp.setDirection(-SComp.getDirection());
+                            }
+                        }
+
+                        // Bullet movement
+                        else if (moveComp.getType() == EntityType.P_BULLET) moveComp.setVy(-1);
+                        else if (moveComp.getType() == EntityType.P_ROCKET) moveComp.setVy(-1);
+                        else if (moveComp.getType() == EntityType.E_BULLET) moveComp.setVy(1);
+                        else if (moveComp.getType() == EntityType.B_ROCKET) moveComp.setVy(1);
+
+                            // Bonus movement
+                        else if (moveComp.getType() == EntityType.BONUS_LIFE)   moveComp.setVy(1);
+                        else if (moveComp.getType() == EntityType.BONUS_SCORE)  moveComp.setVy(1);
+                        else if (moveComp.getType() == EntityType.BONUS_ROCKET) moveComp.setVy(1);
+
+                        // Enemy & Boss movement
+                        if (moveComp instanceof SmartMoveComp SComp) {
+                            if ((SComp.getCounter() + 1) % 4 == 0) {
+                                moveComp.setVx(SComp.getDirection());
+                            }
+                            SComp.setCounter((byte) (SComp.getCounter() + 1));
+                        }
+                    }
+                    //endregion
+                    /*------------------------------------------------------------------------------------------------*/
+                    //region Entity filtering (based on lives)
+                    life.checkLives(lifeList);
+                    for (LifeComp lifeComp: lifeList) {
+                        // Filter death entities
+                        if (lifeComp.isDead()) {
+                            // Change score
+                            if (lifeComp.getType() == EntityType.ENEMY)     score += (bonus == BonusType.BOOST_SCORE ? 3 : 1);
+                            else if (lifeComp.getType() == EntityType.BOSS) score += (bonus == BonusType.BOOST_SCORE ? 7 : 4);
+                                // Only apply bonuses on hits
+                            else if (lifeComp.isHit() || lifeComp.isBigHit()) {
+                                if (lifeComp.getType() == EntityType.BONUS_LIFE)
+                                    player.getLifeComp().setLives(player.getLifeComp().getLives() + 3);
+                                else if (lifeComp.getType() == EntityType.BONUS_SCORE) {
+                                    bonusTimer = System.nanoTime();
+                                    bonus = BonusType.BOOST_SCORE;
+                                } else if (lifeComp.getType() == EntityType.BONUS_ROCKET) {
+                                    bonusTimer = System.nanoTime();
+                                    bonus = BonusType.USE_ROCKET;
+                                }
+                            }
+                            // Remove dead entity
+                            entities.stream().filter(entity -> entity.getLifeComp().equals(lifeComp))
+                                    .findFirst()
+                                    .ifPresent(entities::remove);
+                        }
+                    }
+                    //endregion
+                    /*------------------------------------------------------------------------------------------------*/
+                    //region Visualisation
+                    // Visualise
+                    visualiser.visualise(visualList, score, player.getLifeComp().getLives());
+                    //endregion
+                    /*------------------------------------------------------------------------------------------------*/
+                    //region Reset
+                    // Remove bonus effect after 5 seconds
+                    if ((startTime - bonusTimer) / 1000000 >= 5000) bonus = BonusType.NONE;
+                    // Check for dead entities
+                    life.resetHits(lifeList);
+                    if (player.getLifeComp().getLives() <= 0) state = GameState.GAME_OVER;
+                    // If all enemies are gone --> continue
+                    if (entities.stream().noneMatch(entity -> entity.getMovementComp().getType() == EntityType.ENEMY || entity.getMovementComp().getType() == EntityType.BOSS))
+                        state = GameState.NEXT;
+                    enemyAdvance = false; bossAdvance = false;
+                    //endregion
                 }
-                isRunning = entities.stream().anyMatch(entity -> entity.getMovementComp().getType() == EntityType.ENEMY || entity.getMovementComp().getType() == EntityType.BOSS);
-                enemyAdvance = false; bossAdvance = false;
-                //endregion
-                /*----------------------------------------------------------------------------------------------------*/
-                //region Time management
-                endTime = System.nanoTime();
-                // Reset bonuses
-                if ((endTime - bonusTimer) / 1000000 >= 5000) {
-                    // Remove bonuses after 5 seconds
-                    boostScore = false; useRockets = false;
-                }
-                // Delay
-                duration = (endTime - startTime);
-                startTime = endTime;
-                sleep(50 - duration / 1000000);
-                //endregion
             }
+            /*--------------------------------------------------------------------------------------------------------*/
+            //region Time management
+            endTime = System.nanoTime();
+            duration = (endTime - startTime);
+            startTime = endTime;
+            sleep(50 - duration / 1000000);
+            //endregion
         }
         visualiser.end();
     }

@@ -32,6 +32,5 @@ public interface IFactory {
     // System
     ICollisionDetector getCollisionDetector(int width, int height);
     IVisualiseSystem getVisualiseSystem();
-    IHotBar getHotBarHandler();
     AInput getInput();
 }

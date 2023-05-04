@@ -1,4 +1,4 @@
-package be.uantwerpen.fti.ei.entities;
+package be.uantwerpen.fti.ei.enums;
 
 public enum EntityType {
     PLAYER,

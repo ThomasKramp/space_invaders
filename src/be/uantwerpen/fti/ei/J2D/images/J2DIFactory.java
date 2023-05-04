@@ -1,18 +1,17 @@
 package be.uantwerpen.fti.ei.J2D.images;
 
-import be.uantwerpen.fti.ei.J2D.Input;
-import be.uantwerpen.fti.ei.J2D.GraphicsContext;
+import be.uantwerpen.fti.ei.J2D.J2DInput;
+import be.uantwerpen.fti.ei.J2D.J2DGraphicsContext;
 import be.uantwerpen.fti.ei.components.AVisualComp;
 import be.uantwerpen.fti.ei.components.LifeComp;
 import be.uantwerpen.fti.ei.components.MovementComp;
 import be.uantwerpen.fti.ei.components.SmartMoveComp;
 import be.uantwerpen.fti.ei.dataStruct.PTR;
 import be.uantwerpen.fti.ei.entities.Entity;
-import be.uantwerpen.fti.ei.entities.EntityType;
+import be.uantwerpen.fti.ei.enums.EntityType;
 import be.uantwerpen.fti.ei.input.AInput;
 import be.uantwerpen.fti.ei.interfaces.ICollisionDetector;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
-import be.uantwerpen.fti.ei.interfaces.IHotBar;
 import be.uantwerpen.fti.ei.systems.CollisionDetector1D;
 import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
 
@@ -23,12 +22,12 @@ import java.io.File;
 import java.io.IOException;
 
 public class J2DIFactory implements IFactory {
-    GraphicsContext grCtx;
+    J2DGraphicsContext grCtx;
     public J2DIFactory() {}
 
     @Override
     public void setScreenDimensions(int[] screenDimen) {
-        grCtx = new GraphicsContext(screenDimen[0], screenDimen[1], 16);
+        grCtx = new J2DGraphicsContext(screenDimen[0], screenDimen[1], 16);
     }
 
     // TODO: Cleanup image variables & methods
@@ -146,8 +145,6 @@ public class J2DIFactory implements IFactory {
     @Override
     public IVisualiseSystem getVisualiseSystem() { return new J2DIVisualiseSystem(grCtx); }
     @Override
-    public IHotBar getHotBarHandler() { return grCtx; }
-    @Override
-    public AInput getInput() { return new Input(grCtx); }
+    public AInput getInput() { return new J2DInput(grCtx); }
     //endregion
 }

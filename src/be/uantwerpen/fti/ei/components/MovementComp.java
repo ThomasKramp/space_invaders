@@ -1,7 +1,7 @@
 package be.uantwerpen.fti.ei.components;
 
 import be.uantwerpen.fti.ei.dataStruct.PTR;
-import be.uantwerpen.fti.ei.entities.EntityType;
+import be.uantwerpen.fti.ei.enums.EntityType;
 
 public class MovementComp {
     protected PTR<Integer> x, y;

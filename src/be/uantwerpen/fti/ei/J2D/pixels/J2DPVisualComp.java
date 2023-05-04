@@ -1,17 +1,17 @@
 package be.uantwerpen.fti.ei.J2D.pixels;
 
-import be.uantwerpen.fti.ei.J2D.GraphicsContext;
+import be.uantwerpen.fti.ei.J2D.J2DGraphicsContext;
 import be.uantwerpen.fti.ei.dataStruct.PTR;
 import be.uantwerpen.fti.ei.components.AVisualComp;
 
 public class J2DPVisualComp extends AVisualComp {
-    GraphicsContext grCtx;
+    J2DGraphicsContext grCtx;
     int scale;
     private int[] rgb = new int[3];
     PTR<Boolean> isHit, isBigHit; // this is used for visual purposes
 
     public J2DPVisualComp(PTR<Integer> x, PTR<Integer> y, int size, int scale, int[] rgb,
-                          PTR<Boolean> isHit, PTR<Boolean> isBigHit, GraphicsContext grCtx) {
+                          PTR<Boolean> isHit, PTR<Boolean> isBigHit, J2DGraphicsContext grCtx) {
         super(x, y, size);
         setScale(scale);
         setRGB(rgb);
@@ -19,7 +19,7 @@ public class J2DPVisualComp extends AVisualComp {
         setGrCtx(grCtx);
     }
 
-    private void setGrCtx(GraphicsContext grCtx) { this.grCtx = grCtx; }
+    private void setGrCtx(J2DGraphicsContext grCtx) { this.grCtx = grCtx; }
 
     private void setScale(int scale) { this.scale = scale; }
     public int getScale() { return scale; }

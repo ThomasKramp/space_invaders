@@ -1,27 +1,21 @@
 package be.uantwerpen.fti.ei.J2D;
 
-import be.uantwerpen.fti.ei.interfaces.IHotBar;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class GraphicsContext implements IHotBar {
+public class J2DGraphicsContext {
     private final JFrame frame;
     private final JPanel panel;
     private final BufferedImage g2dImage;
     private final Graphics2D g2d;
     private final int scale;
 
-    public Graphics2D getG2d() {
-        return g2d;
-    }
-    public JFrame getFrame() {
-        return frame;
-    }
+    public Graphics2D getG2d() { return g2d; }
+    public JFrame getFrame() { return frame; }
     public int getScale() { return scale; }
 
-    public GraphicsContext(int width, int height, int scale) {
+    public J2DGraphicsContext(int width, int height, int scale) {
         this.scale = scale;
 
         frame = new JFrame();
@@ -59,13 +53,15 @@ public class GraphicsContext implements IHotBar {
         if (g2d != null) g2d.clearRect(0, 0, frame.getWidth(), frame.getHeight());
     }
 
-    public void updateScore(int score) {
+    public void setTitle(String title) {
         g2d.setColor(new Color(224,224,224));
-        g2d.drawString("Score: " + score, 0, frame.getHeight() - 64);
-    }
-    public void updateHealth(int health) {
-        g2d.setColor(new Color(224,224,224));
-        g2d.drawString("Health: " + health, 64, frame.getHeight() - 64);
+        g2d.setFont(new Font("title", Font.BOLD, getScale() * 3));
+        g2d.drawString(title, frame.getWidth() / 3, frame.getHeight() / 3);
     }
 
+    public void setText(String text, int x, int y) {
+        g2d.setColor(new Color(224,224,224));
+        g2d.setFont(new Font("text", Font.PLAIN, 12));
+        g2d.drawString(text, x, y);
+    }
 }

@@ -1,20 +1,20 @@
 package be.uantwerpen.fti.ei.J2D.images;
 
-import be.uantwerpen.fti.ei.J2D.GraphicsContext;
+import be.uantwerpen.fti.ei.J2D.J2DGraphicsContext;
 import be.uantwerpen.fti.ei.components.AVisualComp;
 import be.uantwerpen.fti.ei.dataStruct.PTR;
 
 import java.awt.image.BufferedImage;
 
 public class J2DIVisualComp extends AVisualComp {
-    GraphicsContext grCtx;
+    J2DGraphicsContext grCtx;
     int scale;
     private BufferedImage sprite;
     private BufferedImage spriteHit;
     PTR<Boolean> isHit, isBigHit; // this is used for visual purposes
 
     public J2DIVisualComp(PTR<Integer> x, PTR<Integer> y, int size, int scale, BufferedImage sprite,
-                          PTR<Boolean> isHit, PTR<Boolean> isBigHit, GraphicsContext grCtx) {
+                          PTR<Boolean> isHit, PTR<Boolean> isBigHit, J2DGraphicsContext grCtx) {
         super(x, y, size);
         setScale(scale);
         setSprite(sprite);
@@ -22,7 +22,7 @@ public class J2DIVisualComp extends AVisualComp {
         setGrCtx(grCtx);
     }
     public J2DIVisualComp(PTR<Integer> x, PTR<Integer> y, int size, int scale, BufferedImage sprite, BufferedImage spriteHit,
-                           PTR<Boolean> isHit, PTR<Boolean> isBigHit, GraphicsContext grCtx) {
+                           PTR<Boolean> isHit, PTR<Boolean> isBigHit, J2DGraphicsContext grCtx) {
         super(x, y, size);
         setScale(scale);
         setSprite(sprite); setSpriteHit(spriteHit);
@@ -30,7 +30,7 @@ public class J2DIVisualComp extends AVisualComp {
         setGrCtx(grCtx);
     }
 
-    private void setGrCtx(GraphicsContext grCtx) { this.grCtx = grCtx; }
+    private void setGrCtx(J2DGraphicsContext grCtx) { this.grCtx = grCtx; }
 
     private void setScale(int scale) { this.scale = scale; }
     public int getScale() { return scale; }
