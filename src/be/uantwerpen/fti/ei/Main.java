@@ -16,7 +16,7 @@ public class Main {
 
         ConfigReader config = new ConfigReader();
         try {
-            config.getScreenSettings(cwd + "\\src\\be\\uantwerpen\\fti\\ei\\config\\config.txt");
+            config.getScreenSettings(cwd + "/src/be/uantwerpen/fti/ei/config/config.txt");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

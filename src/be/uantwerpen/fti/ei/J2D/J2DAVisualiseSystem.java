@@ -27,17 +27,13 @@ abstract public class J2DAVisualiseSystem implements IVisualiseSystem {
 
     @Override
     public void visualise(String title, String... lines) {
-        int x, y, offset;
-
         // Place title
         grCtx.setTitle(title);
 
         // Place text
-        x = grCtx.getFrame().getWidth() / 2;
-        y = grCtx.getFrame().getHeight() / 2;
+        int y = grCtx.getFrame().getHeight() / 2;
         if (lines != null) for (String line : lines) {
-            offset = (line.length() / 2) * 6;
-            grCtx.setText(line, x - offset, y);
+            grCtx.setText(line, 0, y);
             y += grCtx.getScale();
         }
 

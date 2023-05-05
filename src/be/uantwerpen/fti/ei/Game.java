@@ -1,14 +1,12 @@
 package be.uantwerpen.fti.ei;
 
+import be.uantwerpen.fti.ei.audio.AudioPlayer;
 import be.uantwerpen.fti.ei.config.LevelConfig;
-import be.uantwerpen.fti.ei.enums.BonusType;
-import be.uantwerpen.fti.ei.enums.EntityType;
-import be.uantwerpen.fti.ei.enums.GameState;
+import be.uantwerpen.fti.ei.enums.*;
 import be.uantwerpen.fti.ei.interfaces.ICollisionDetector;
 import be.uantwerpen.fti.ei.components.*;
 import be.uantwerpen.fti.ei.entities.Entity;
 import be.uantwerpen.fti.ei.input.AInput;
-import be.uantwerpen.fti.ei.enums.InputType;
 import be.uantwerpen.fti.ei.interfaces.IFactory;
 import be.uantwerpen.fti.ei.systems.*;
 
@@ -237,7 +235,9 @@ public class Game {
         IVisualiseSystem visualiser = factory.getVisualiseSystem();
 
         // Variables
-        GameState state = GameState.RUN;
+        GameState state = GameState.START;
+        int levelIndex = 0;
+        List<Entity> entities = new ArrayList<>();
         long startTime = System.nanoTime(), endTime, duration;
         int score = 0;
 
@@ -248,55 +248,62 @@ public class Game {
         boolean enemyAdvance = false;   // Boolean for enemy advancement (Entity movement)
         boolean bossAdvance = false;    // Boolean for boss advancement (Entity movement)
 
-        int levelIndex = 1;
-        List<Entity> entities = levelEntities[0];
-        entities.add(player);
+        // TODO: delete absolute path in config reader
+        // TODO: Change this
+        Map<MusicType, String> music = new HashMap<>();
+        music.put(MusicType.BACKGROUND, "background.wav");
+        music.put(MusicType.PLAYER_HIT, "player_hit.wav");
+        music.put(MusicType.ENEMY_HIT,  "enemy_hit.wav");
+        music.put(MusicType.SHOOT,      "shoot.wav");
+        music.put(MusicType.BONUS_DROP, "bonus_drop.wav");
+
+        AudioPlayer musicPlayer = new AudioPlayer("src/be/uantwerpen/fti/ei/sounds/", music);
+        //musicPlayer.playContinues(MusicType.BACKGROUND);
 
         while (state != GameState.END) {
             sleep(50);
             switch (state) {
                 /*----------------------------------------------------------------------------------------------------*/
+                case START      -> {
+                    // Input handling
+                    if (input.inputAvailable() && input.getInput() == InputType.ENTER) state = GameState.NEXT; // Start
+                    // Visualisation
+                    visualiser.visualise("Space Invaders", "Press Enter to start");
+                }
+                /*----------------------------------------------------------------------------------------------------*/
                 case GAME_WON   -> {
                     // Input handling
-                    if (input.inputAvailable()) {
-                        InputType direction = input.getInput();
-                        if (direction == InputType.ESCAPE) state = GameState.END; // Stop
-                    }
+                    if (input.inputAvailable() && input.getInput() == InputType.ENTER) state = GameState.END; // Stop
                     // Visualisation
-                    visualiser.visualise("Victory!!!",
-                            "Press Enter to Leave",
+                    visualiser.visualise("Victory!!!", "Press Enter to Leave",
                             "Score: " + score + " - Health: " + player.getLifeComp().getLives()
                     );
                 }
                 /*----------------------------------------------------------------------------------------------------*/
                 case GAME_OVER  -> {
                     // Input handling
-                    if (input.inputAvailable()) {
-                        InputType direction = input.getInput();
-                        if (direction == InputType.ESCAPE) state = GameState.END; // Stop
-                    }
+                    if (input.inputAvailable() && input.getInput() == InputType.ENTER) state = GameState.END; // Stop
                     // Visualisation
                     visualiser.visualise("Game Over!!!", "Press Enter to Leave", "Score: " + score);
                 }
                 /*----------------------------------------------------------------------------------------------------*/
                 case NEXT       -> {
+                    // Start new level or end game
+                    if (levelIndex == levelEntities.length) state = GameState.GAME_WON;
+                    else                                    state = GameState.RUN;
+
                     // Get new entities
                     entities = levelEntities[levelIndex];
                     entities.add(player);
-
-                    // Start new level or end game
                     levelIndex++;
-                    if (levelIndex == levelEntities.length) state = GameState.GAME_WON;
-                    else                                    state = GameState.RUN;
                 }
                 /*----------------------------------------------------------------------------------------------------*/
                 case PAUSE      -> {
                     // Input handling
                     if (input.inputAvailable()) {
-                        InputType direction = input.getInput();
-                        switch (direction) {
+                        switch (input.getInput()) {
                             case ESCAPE -> state = GameState.END; // Stop
-                            case SPACE  -> state = GameState.RUN; // Continue
+                            case ENTER  -> state = GameState.RUN; // Continue
                         }
                     }
                     // Visualisation
@@ -311,12 +318,12 @@ public class Game {
                     /*------------------------------------------------------------------------------------------------*/
                     //region Input handling
                     if (input.inputAvailable()) {
-                        InputType direction = input.getInput();
-                        switch (direction) {
+                        switch (input.getInput()) {
                             // Game state
                             case ESCAPE -> { state = GameState.PAUSE; }
                             // Shooting
                             case SPACE  -> {
+                                musicPlayer.play(MusicType.SHOOT);
                                 if (bonus == BonusType.USE_ROCKET)
                                     entities.add(factory.getPRocket(player.getMovementComp().getX(), player.getMovementComp().getY()));
                                 else    entities.add(factory.getPBullet(player.getMovementComp().getX(), player.getMovementComp().getY()));
@@ -355,9 +362,18 @@ public class Game {
                             entities.add(factory.getBRocket(moveComp.getX() + moveComp.getSize() / 2 + 1, moveComp.getY()));
                     }
                     // Add bonuses
-                    if (randomValue % 61 == 23)         entities.add(factory.getBonusLives((int) (Math.random() * screenWidth), 0));
-                    else if (randomValue % 61 == 29)    entities.add(factory.getBonusScore((int) (Math.random() * screenWidth), 0));
-                    else if (randomValue % 61 == 31)    entities.add(factory.getBonusRocket((int) (Math.random() * screenWidth), 0));
+                    if (randomValue % 61 == 23) {
+                        entities.add(factory.getBonusLives((int) (Math.random() * screenWidth), 0));
+                        musicPlayer.play(MusicType.BONUS_DROP);
+                    }
+                    else if (randomValue % 61 == 29) {
+                        entities.add(factory.getBonusScore((int) (Math.random() * screenWidth), 0));
+                        musicPlayer.play(MusicType.BONUS_DROP);
+                    }
+                    else if (randomValue % 61 == 31) {
+                        entities.add(factory.getBonusRocket((int) (Math.random() * screenWidth), 0));
+                        musicPlayer.play(MusicType.BONUS_DROP);
+                    }
                     //endregion
                     /*------------------------------------------------------------------------------------------------*/
                     //region Entity collision detection
@@ -464,6 +480,11 @@ public class Game {
                                     bonusTimer = System.nanoTime();
                                     bonus = BonusType.USE_ROCKET;
                                 }
+                            } else if (lifeComp.isHit() || lifeComp.isBigHit()) {
+                                if (lifeComp.getType() == EntityType.ENEMY || lifeComp.getType() == EntityType.BOSS)
+                                    musicPlayer.play(MusicType.ENEMY_HIT);
+                                else if (lifeComp.getType() == EntityType.PLAYER)
+                                    musicPlayer.play(MusicType.PLAYER_HIT);
                             }
                             // Remove dead entity
                             entities.stream().filter(entity -> entity.getLifeComp().equals(lifeComp))
@@ -501,4 +522,5 @@ public class Game {
         }
         visualiser.end();
     }
+
 }

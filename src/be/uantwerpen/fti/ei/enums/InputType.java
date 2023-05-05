@@ -6,5 +6,6 @@ public enum InputType {
     UP,
     DOWN,
     SPACE,
-    ESCAPE
+    ESCAPE,
+    ENTER
 }

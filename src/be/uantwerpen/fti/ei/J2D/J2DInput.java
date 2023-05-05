@@ -22,6 +22,7 @@ public class J2DInput extends AInput {
                 case KeyEvent.VK_UP     -> keyInputs.add(InputType.UP);
                 case KeyEvent.VK_SPACE  -> keyInputs.add(InputType.SPACE);
                 case KeyEvent.VK_ESCAPE -> keyInputs.add(InputType.ESCAPE);
+                case KeyEvent.VK_ENTER  -> keyInputs.add(InputType.ENTER);
             }
         }
     }

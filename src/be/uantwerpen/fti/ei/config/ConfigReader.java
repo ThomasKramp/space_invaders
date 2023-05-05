@@ -32,7 +32,7 @@ public class ConfigReader {
         }
     }
     private void addLevel(String path, String file) throws IOException {
-        if (path.contains(".txt")) path = path.substring(0, path.lastIndexOf('\\') + 1);
+        if (path.contains(".txt")) path = path.substring(0, path.lastIndexOf('/') + 1);
         BufferedReader br = new BufferedReader(new FileReader(path + file));
         String config;
         LevelConfig level = new LevelConfig();

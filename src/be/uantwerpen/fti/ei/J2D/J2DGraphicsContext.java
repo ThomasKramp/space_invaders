@@ -53,15 +53,17 @@ public class J2DGraphicsContext {
         if (g2d != null) g2d.clearRect(0, 0, frame.getWidth(), frame.getHeight());
     }
 
+    // https://stackoverflow.com/a/32859632
     public void setTitle(String title) {
         g2d.setColor(new Color(224,224,224));
         g2d.setFont(new Font("title", Font.BOLD, getScale() * 3));
-        g2d.drawString(title, frame.getWidth() / 3, frame.getHeight() / 3);
+        g2d.drawString(title, (frame.getWidth() - g2d.getFontMetrics().stringWidth(title)) / 2, frame.getHeight() / 3);
     }
 
     public void setText(String text, int x, int y) {
         g2d.setColor(new Color(224,224,224));
         g2d.setFont(new Font("text", Font.PLAIN, 12));
+        x = (x == 0 ? (frame.getWidth() - g2d.getFontMetrics().stringWidth(text)) / 2 : x);
         g2d.drawString(text, x, y);
     }
 }
