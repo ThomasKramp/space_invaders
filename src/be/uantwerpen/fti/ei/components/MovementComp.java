@@ -9,26 +9,21 @@ public class MovementComp {
     EntityType type;
 
     public MovementComp(PTR<Integer> x, PTR<Integer> y, int size, EntityType type) {
-        setX(x);    setY(y);
         setSize(size);
         setType(type);
-    }
-
-    public PTR<Integer> getXPtr() { return x; }
-    public int getX() { return x.getValue(); }
-    public void setX(PTR<Integer> x) {
+        // Set X
         if (x.getValue() >= 0) this.x = x;
         else this.x.setValue(0);
-    }
-    public void setX(int x) { this.x.setValue(Math.max(x, 0)); }
-
-    public PTR<Integer> getYPtr() { return y; }
-    public int getY() { return y.getValue(); }
-    public void setY(PTR<Integer> y) {
+        // Set Y
         if (y.getValue() >= 0) this.y = y;
         else this.y.setValue(0);
     }
-    public void setY(int y) { this.x.setValue(Math.max(y, 0)); }
+
+    public int getX() { return x.getValue(); }
+    public void setX(int x) { this.x.setValue(Math.max(x, 0)); }
+
+    public int getY() { return y.getValue(); }
+    public void setY(int y) { this.y.setValue(Math.max(y, 0)); }
 
     public int getVx() { return vx; }
     public void setVx(int vx) { this.vx = vx; }

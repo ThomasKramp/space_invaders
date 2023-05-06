@@ -17,10 +17,11 @@ public class Game {
     private final IFactory factory;
     private final AInput input;
     private final Entity player;
-    private final List<Entity>[] levelEntities;
+    private final ArrayList<Entity>[] levelEntities;
+    private final AudioPlayer musicPlayer;
     private final int screenWidth, screenHeight;
 
-    public Game(IFactory fact, int[] screenDimen, int[] playerConfig, List<LevelConfig> levels) {
+    public Game(IFactory fact, int[] screenDimen, int[] playerConfig, ArrayList<LevelConfig> levels, Map<MusicType, String> music) {
         // Initiate Factory
         this.factory = fact;
         this.factory.setScreenDimensions(screenDimen);
@@ -34,13 +35,17 @@ public class Game {
         player = factory.getPlayer(screenWidth / 2 - 1, screenHeight * 5 / 6, playerConfig[0], playerConfig[1]);
 
         // Initiate levels
-        levelEntities = new List[levels.size()];
+        levelEntities = new ArrayList[levels.size()];
         createLevels(levels);
+
+        // Load music
+        musicPlayer = new AudioPlayer("src/be/uantwerpen/fti/ei/sounds/", music);
     }
 
-    private void createLevels(List<LevelConfig> levels) {
+    private void createLevels(ArrayList<LevelConfig> levels) {
         for (LevelConfig level: levels) {
-            List<Entity> entities = new ArrayList<>();
+            ArrayList<Entity> entities = new ArrayList<>();
+            entities.add(player);
             int xStart, yStart, rowTotal, offset;
 
             // Enemies
@@ -248,17 +253,7 @@ public class Game {
         boolean enemyAdvance = false;   // Boolean for enemy advancement (Entity movement)
         boolean bossAdvance = false;    // Boolean for boss advancement (Entity movement)
 
-        // TODO: delete absolute path in config reader
-        // TODO: Change this
-        Map<MusicType, String> music = new HashMap<>();
-        music.put(MusicType.BACKGROUND, "background.wav");
-        music.put(MusicType.PLAYER_HIT, "player_hit.wav");
-        music.put(MusicType.ENEMY_HIT,  "enemy_hit.wav");
-        music.put(MusicType.SHOOT,      "shoot.wav");
-        music.put(MusicType.BONUS_DROP, "bonus_drop.wav");
-
-        AudioPlayer musicPlayer = new AudioPlayer("src/be/uantwerpen/fti/ei/sounds/", music);
-        //musicPlayer.playContinues(MusicType.BACKGROUND);
+        musicPlayer.playContinues(MusicType.BACKGROUND);
 
         while (state != GameState.END) {
             sleep(50);
@@ -290,12 +285,12 @@ public class Game {
                 case NEXT       -> {
                     // Start new level or end game
                     if (levelIndex == levelEntities.length) state = GameState.GAME_WON;
-                    else                                    state = GameState.RUN;
-
-                    // Get new entities
-                    entities = levelEntities[levelIndex];
-                    entities.add(player);
-                    levelIndex++;
+                    else {
+                        state = GameState.RUN;
+                        // Get new entities
+                        entities = levelEntities[levelIndex];
+                        levelIndex++;
+                    }
                 }
                 /*----------------------------------------------------------------------------------------------------*/
                 case PAUSE      -> {
@@ -320,7 +315,7 @@ public class Game {
                     if (input.inputAvailable()) {
                         switch (input.getInput()) {
                             // Game state
-                            case ESCAPE -> { state = GameState.PAUSE; }
+                            case ESCAPE -> state = GameState.PAUSE;
                             // Shooting
                             case SPACE  -> {
                                 musicPlayer.play(MusicType.SHOOT);
@@ -414,6 +409,16 @@ public class Game {
                                     moveComp.setVy(0);
                                 }
                         }
+
+                        // Collision sounds
+                        for (LifeComp lifeComp: lifeList) {
+                            if (lifeComp.isHit() || lifeComp.isBigHit()) {
+                                if (lifeComp.getType() == EntityType.ENEMY || lifeComp.getType() == EntityType.BOSS)
+                                    musicPlayer.play(MusicType.ENEMY_HIT);
+                                else if (lifeComp.getType() == EntityType.PLAYER)
+                                    musicPlayer.play(MusicType.PLAYER_HIT);
+                            }
+                        }
                     }
                     //endregion
                     /*------------------------------------------------------------------------------------------------*/
@@ -480,11 +485,6 @@ public class Game {
                                     bonusTimer = System.nanoTime();
                                     bonus = BonusType.USE_ROCKET;
                                 }
-                            } else if (lifeComp.isHit() || lifeComp.isBigHit()) {
-                                if (lifeComp.getType() == EntityType.ENEMY || lifeComp.getType() == EntityType.BOSS)
-                                    musicPlayer.play(MusicType.ENEMY_HIT);
-                                else if (lifeComp.getType() == EntityType.PLAYER)
-                                    musicPlayer.play(MusicType.PLAYER_HIT);
                             }
                             // Remove dead entity
                             entities.stream().filter(entity -> entity.getLifeComp().equals(lifeComp))
@@ -520,6 +520,7 @@ public class Game {
             sleep(50 - duration / 1000000);
             //endregion
         }
+        musicPlayer.stop();
         visualiser.end();
     }
 

@@ -1,0 +1,7 @@
+# Audio files
+background=background.wav
+player_hit=player_hit.wav
+enemy_hit=enemy_hit.wav
+shoot=shoot.wav
+bonus_drop=bonus_drop.wav
+dp=dp.wav

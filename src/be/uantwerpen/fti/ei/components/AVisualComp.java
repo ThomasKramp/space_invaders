@@ -7,24 +7,21 @@ public class AVisualComp {
     int size;
 
     public AVisualComp(PTR<Integer> x, PTR<Integer> y, int size) {
-        setX(x); setY(y);
+        // Set horizontal size
         setSize(size);
+        // Set X
+        if (x.getValue() >= 0) this.x = x;
+        else this.x.setValue(0);
+        // Set Y
+        if (y.getValue() >= 0) this.y = y;
+        else this.y.setValue(0);
     }
 
     public int getX() { return x.getValue(); }
 
-    public void setX(PTR<Integer> x) {
-        if (x.getValue() >= 0) this.x = x;
-        else this.x.setValue(0);
-    }
-
     public void setX(int x) { this.x.setValue(Math.max(x, 0)); }
 
     public int getY() { return y.getValue(); }
-
-    public void setY(PTR<Integer> y) {
-        if (y.getValue() >= 0) this.y = y;
-        else this.y.setValue(0); }
 
     public void setY(int y) { this.x.setValue(Math.max(y, 0)); }
 

@@ -9,7 +9,6 @@ public enum EntityType {
     E_BULLET,
     BOSS,
     B_ROCKET,
-    BONUS,
     BONUS_LIFE,
     BONUS_SCORE,
     BONUS_ROCKET

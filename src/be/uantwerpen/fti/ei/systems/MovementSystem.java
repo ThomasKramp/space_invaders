@@ -9,9 +9,9 @@ public class MovementSystem {
     public void update(List<MovementComp> components) {
         for (MovementComp component: components) {
             // Add the velocity to the current position to calculate the new position
-            // System.out.println("X: " + component.getX().getValue() + ", Y: " + component.getY().getValue());
-            component.getXPtr().setValue(component.getX() + component.getVx());
-            component.getYPtr().setValue(component.getY() + component.getVy());
+            // System.out.println("X: " + component.getX() + ", Y: " + component.getY());
+            component.setX(component.getX() + component.getVx());
+            component.setY(component.getY() + component.getVy());
             component.setVx(0); component.setVy(0);
         }
     }
