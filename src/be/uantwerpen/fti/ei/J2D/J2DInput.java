@@ -6,7 +6,10 @@ import be.uantwerpen.fti.ei.enums.InputType;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-/** Input class that uses keyboard events as inputs */
+/**
+ * Input class that uses keyboard events as inputs
+ * @see    AInput
+ */
 public class J2DInput extends AInput {
 
     /**

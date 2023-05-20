@@ -15,7 +15,7 @@ public class SmartMoveComp extends MovementComp {
     int direction;
 
     /**
-     * Class constructor specifying the pointers to the coordinates, the width and the type of the entity that will be visualised.
+     * Class constructor specifying the base variables of the entity that will be visualised.
      * @param   x an integer pointer representing the x-coordinate of the entity
      * @param   y an integer pointer representing the y-coordinate of the entity
      * @param   width an integer representing the width of the entity

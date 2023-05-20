@@ -6,11 +6,14 @@ import be.uantwerpen.fti.ei.components.AVisualComp;
 
 import java.awt.*;
 
-/** Class to visualise entities via pixel coloring using Java-2D */
+/**
+ * Class to visualise entities via pixel coloring using Java-2D
+ * @see J2DAVisualiseSystem
+ */
 public class J2DPVisualiseSystem extends J2DAVisualiseSystem {
 
     /**
-     * Class constructor specifying the graphics context.
+     * Class constructor specifying the base variables.
      * @param   grCtx graphics context containing all screen variables and settings.
      * @see     J2DGraphicsContext
      */

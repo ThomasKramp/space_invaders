@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Base Java-2D visualisation system class that must be inherited by other Java-2D visualisation system classes<br>
  * A class to visualise the game using Java-2D
+ * @see IVisualiseSystem
  */
 abstract public class J2DAVisualiseSystem implements IVisualiseSystem {
     /**
