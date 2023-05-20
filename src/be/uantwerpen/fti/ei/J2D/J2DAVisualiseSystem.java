@@ -5,11 +5,29 @@ import be.uantwerpen.fti.ei.systems.IVisualiseSystem;
 
 import java.util.List;
 
+/**
+ * Base Java-2D visualisation system class that must be inherited by other Java-2D visualisation system classes<br>
+ * A class to visualise the game using Java-2D
+ */
 abstract public class J2DAVisualiseSystem implements IVisualiseSystem {
-    protected J2DGraphicsContext grCtx;
+    /**
+     * Represents screen.
+     * @see     J2DGraphicsContext
+     */
+    protected final J2DGraphicsContext grCtx;
 
+    /**
+     * Class constructor specifying the graphics context.
+     * @param   grCtx graphics context containing all screen variables and settings.
+     * @see     J2DGraphicsContext
+     */
     public J2DAVisualiseSystem(J2DGraphicsContext grCtx) { this.grCtx = grCtx; }
 
+    /**
+     * Method to scale and place the entity based on the graphics used.
+     * @param   component visual component of the entity.
+     * @see     AVisualComp
+     */
     protected abstract void placeComponents(AVisualComp component);
 
     @Override
@@ -17,7 +35,7 @@ abstract public class J2DAVisualiseSystem implements IVisualiseSystem {
         // Place entities
         for (AVisualComp component: components) placeComponents(component);
 
-        // Place hotbar
+        // Place hot-bar
         grCtx.setText("Score: " + score, grCtx.getScale(), grCtx.getFrame().getHeight() - grCtx.getScale() * 4);
         grCtx.setText("Health: " + lives, grCtx.getScale() * 5, grCtx.getFrame().getHeight() - grCtx.getScale() * 4);
 

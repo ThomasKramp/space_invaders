@@ -34,11 +34,8 @@ public class J2DIFactory implements IFactory {
     // Load images
     private BufferedImage loadImages(String path) {
         BufferedImage backgroundImg = null;
-        try {
-            backgroundImg = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            System.out.println("Unable to load " + path);
-        }
+        try { backgroundImg = ImageIO.read(new File(path)); }
+        catch (IOException e) { System.out.println("Unable to load " + path); }
         return backgroundImg;
     }
 
@@ -61,9 +58,9 @@ public class J2DIFactory implements IFactory {
         if (isHittable) {
             BufferedImage image2 = loadImages(path2);
             image2 = resizeImage(image2, size * scale, scale);
-            visualComp = new J2DIVisualComp(xPtr, yPtr, size, scale, backgroundImg, image2, isHit, isBigHit, grCtx);
+            visualComp = new J2DIVisualComp(xPtr, yPtr, size, scale, backgroundImg, image2, isHit, isBigHit);
         } else {
-            visualComp = new J2DIVisualComp(xPtr, yPtr, size, scale, backgroundImg, isHit, isBigHit, grCtx);
+            visualComp = new J2DIVisualComp(xPtr, yPtr, size, scale, backgroundImg, isHit, isBigHit);
         }
         return new Entity(moveComp,
                 new LifeComp(lives, isHit, isBigHit, isDead, type),

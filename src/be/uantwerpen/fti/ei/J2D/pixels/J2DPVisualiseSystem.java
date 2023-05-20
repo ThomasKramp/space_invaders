@@ -6,9 +6,14 @@ import be.uantwerpen.fti.ei.components.AVisualComp;
 
 import java.awt.*;
 
+/** Class to visualise entities via pixel coloring using Java-2D */
 public class J2DPVisualiseSystem extends J2DAVisualiseSystem {
-    J2DGraphicsContext grCtx;
 
+    /**
+     * Class constructor specifying the graphics context.
+     * @param   grCtx graphics context containing all screen variables and settings.
+     * @see     J2DGraphicsContext
+     */
     public J2DPVisualiseSystem(J2DGraphicsContext grCtx) { super(grCtx); }
 
     @Override
@@ -24,6 +29,6 @@ public class J2DPVisualiseSystem extends J2DAVisualiseSystem {
         // Place component
         int scaleDiff = (grCtx.getScale() - j2dComp.getScale()) / 2; // Compensate for scaling differences
         g2d.fillRect(j2dComp.getX() * grCtx.getScale() + scaleDiff, j2dComp.getY() * grCtx.getScale() + scaleDiff,
-                j2dComp.getSize() * j2dComp.getScale(), j2dComp.getScale());
+                j2dComp.getWidth() * j2dComp.getScale(), j2dComp.getScale());
     }
 }

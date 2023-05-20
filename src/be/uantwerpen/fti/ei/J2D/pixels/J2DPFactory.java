@@ -32,7 +32,7 @@ public class J2DPFactory implements IFactory {
         MovementComp moveComp = isSmart ? new SmartMoveComp(xPtr, yPtr, size, type) : new MovementComp(xPtr, yPtr, size, type);
         return new Entity(moveComp,
                 new LifeComp(lives, isHit, isBigHit, isDead, type),
-                new J2DPVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit, grCtx)
+                new J2DPVisualComp(xPtr, yPtr, size, scale, rgb, isHit, isBigHit)
         );
     }
     //endregion

@@ -4,8 +4,14 @@ import be.uantwerpen.fti.ei.components.MovementComp;
 
 import java.util.List;
 
+/** Class that updates the movement components of a list of entities */
 public class MovementSystem {
 
+    /**
+     * Method to update the coordinates of a list of entities.
+     * @param   components list of all entities their movement components that need to be updated
+     * @see     MovementComp
+     */
     public void update(List<MovementComp> components) {
         for (MovementComp component: components) {
             // Add the velocity to the current position to calculate the new position
