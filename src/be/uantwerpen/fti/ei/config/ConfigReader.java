@@ -9,14 +9,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/** Class that reads .txt files to obtain the game's configuration. */
 public class ConfigReader {
     private final int[] screenDimen = new int[2];
     private final int[] playerConfig = new int[2];
+    /**
+     * List containing all the different level configurations
+     * @see     LevelConfig
+     */
     private final ArrayList<LevelConfig> levels = new ArrayList<>();
+    /**
+     * Dictionary that binds music clips with a name
+     * @see     MusicType
+     */
     private final Map<MusicType, String> music = new HashMap<>();
 
-    // https://www.geeksforgeeks.org/different-ways-reading-text-file-java/
-    public void getScreenSettings(String path) {
+    /**
+     * Method to read and store the settings of multiple config files.
+     * {@link}  &nbsp;Reading text files <a href="https://www.geeksforgeeks.org/different-ways-reading-text-file-java/">Reading text files</a>
+     * @param   path a string representing the path to the main config file
+     */
+    public void readSettings(String path) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             String config;
@@ -36,6 +49,12 @@ public class ConfigReader {
             }
         } catch (IOException e) { throw new RuntimeException(e); }
     }
+    /**
+     * Method to read and store the settings of multiple config files.
+     * @param   path a string representing the path to the main config file
+     * @param   file a string representing the name of the level config file
+     * @throws  IOException throws when the given file doesn't exist
+     */
     private void addLevel(String path, String file) throws IOException {
         if (path.contains(".txt")) path = path.substring(0, path.lastIndexOf('/') + 1);
         BufferedReader br = new BufferedReader(new FileReader(path + file));
@@ -47,20 +66,25 @@ public class ConfigReader {
             switch (setting[0]) {
                 case "enemy_total"  -> level.setEnemyTotal(Integer.parseInt(setting[1]));
                 case "enemy_lives"  -> level.setEnemyLives(Integer.parseInt(setting[1]));
-                case "enemy_size"   -> level.setEnemySize(Integer.parseInt(setting[1]));
+                case "enemy_width"   -> level.setEnemyWidth(Integer.parseInt(setting[1]));
 
                 case "boss_total"   -> level.setBossTotal(Integer.parseInt(setting[1]));
                 case "boss_lives"   -> level.setBossLives(Integer.parseInt(setting[1]));
-                case "boss_size"    -> level.setBossSize(Integer.parseInt(setting[1]));
+                case "boss_width"    -> level.setBossWidth(Integer.parseInt(setting[1]));
 
                 case "wall_total"   -> level.setWallTotal(Integer.parseInt(setting[1]));
                 case "wall_lives"   -> level.setWallLives(Integer.parseInt(setting[1]));
-                case "wall_size"    -> level.setWallSize(Integer.parseInt(setting[1]));
+                case "wall_width"    -> level.setWallWidth(Integer.parseInt(setting[1]));
             }
         }
         levels.add(level);
     }
-
+    /**
+     * Method to read and store the settings of multiple music files.
+     * @param   path a string representing the path to the main config file
+     * @param   file a string representing the name of the music config file
+     * @throws  IOException throws when the given file doesn't exist
+     */
     private void addMusic(String path, String file) throws IOException {
         if (path.contains(".txt")) path = path.substring(0, path.lastIndexOf('/') + 1);
         BufferedReader br = new BufferedReader(new FileReader(path + file));
@@ -79,8 +103,26 @@ public class ConfigReader {
         }
     }
 
+    /**
+     * Returns the screen-dimensions defined by the config-file
+     * @return  an array of integers representing the screen-dimensions
+     */
     public int[] getScreenDimen() { return screenDimen; }
+    /**
+     * Returns the player configuration defined by the config-file
+     * @return  an array of integers representing the player configuration
+     */
     public int[] getPlayerConfig() { return playerConfig; }
+    /**
+     * Returns a list containing all the different level configurations
+     * @return  a list of all the different level configurations
+     * @see     LevelConfig
+     */
     public ArrayList<LevelConfig> getLevels() { return levels; }
+    /**
+     * Returns a dictionary containing all the music files
+     * @return  a dictionary containing all the music files
+     * @see     MusicType
+     */
     public Map<MusicType, String> getMusic() { return music; }
 }

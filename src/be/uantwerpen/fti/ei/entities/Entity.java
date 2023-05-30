@@ -4,14 +4,14 @@ import be.uantwerpen.fti.ei.components.LifeComp;
 import be.uantwerpen.fti.ei.components.MovementComp;
 import be.uantwerpen.fti.ei.components.AVisualComp;
 
-/**
- * Class record specifying the components of the entity that contain its data.
- * @param movementComp  Component containing the movement and collisions data of the entity.
- * @param lifeComp      Component containing the hit status and life data of the entity.
- * @param visualComp    Component containing the visualisation data of the entity.
- */
+/** Class record specifying the components of the entity that contain its data. */
 public record Entity(MovementComp movementComp, LifeComp lifeComp, AVisualComp visualComp) {
-    /** Class to generically describe any entity */
+    /**
+     * Class to generically describe any entity
+     * @param movementComp  Component containing the movement and collisions data of the entity.
+     * @param lifeComp      Component containing the hit status and life data of the entity.
+     * @param visualComp    Component containing the visualisation data of the entity.
+     */
     public Entity { }
 
     /**

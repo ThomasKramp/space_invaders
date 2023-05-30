@@ -17,6 +17,9 @@ public abstract class J2DAVisualComp extends AVisualComp {
 
     /**
      * Class constructor specifying the scale and the pointers to the hit statuses on top of the base variables of the entity that will be visualised.
+     * @param   x an integer pointer representing the x-coordinate of the entity
+     * @param   y an integer pointer representing the y-coordinate of the entity
+     * @param   width an integer representing the width of the entity
      * @param   scale an integer representing the scaling factor of the base game compared to the Java-2d visualisation
      * @param   isHit a boolean pointer representing the hit status of a normal hit on the entity
      * @param   isBigHit a boolean pointer representing the hit status of a bigger hit on the entity

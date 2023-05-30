@@ -13,14 +13,46 @@ import be.uantwerpen.fti.ei.systems.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/** Class that represents the game. */
 public class Game {
+    /**
+     * Factory which will create the entities
+     * @see     IFactory
+     */
     private final IFactory factory;
+    /**
+     * AInput that will store and return the (keyboard) inputs
+     * @see     AInput
+     */
     private final AInput input;
+    /**
+     * Entity that the player will use
+     * @see     Entity
+     */
     private final Entity player;
+    /**
+     * List containing lists of all the entities in a level
+     * @see     Entity
+     */
     private final ArrayList<ArrayList<Entity>> levelEntities = new ArrayList<>();
+    /**
+     * Audioplayer that will play background music and sound effects
+     * @see     AudioPlayer
+     */
     private final AudioPlayer musicPlayer;
     private final int screenWidth, screenHeight;
 
+    /**
+     * Class constructor specifying the factory to create entities, the screen-dimensions, the player configuration, the levels and the music.
+     * @param   fact a factory which will create the entities
+     * @param   screenDimen an array of integers representing the screen-dimensions
+     * @param   playerConfig an array of integers representing the player configuration
+     * @param   levels a list containing all the different level configurations
+     * @param   music a dictionary that binds music clips with a name
+     * @see     IFactory
+     * @see     LevelConfig
+     * @see     MusicType
+     */
     public Game(IFactory fact, int[] screenDimen, int[] playerConfig, ArrayList<LevelConfig> levels, Map<MusicType, String> music) {
         // Initiate Factory
         this.factory = fact;
@@ -41,6 +73,11 @@ public class Game {
         musicPlayer = new AudioPlayer("src/be/uantwerpen/fti/ei/sounds/", music);
     }
 
+    /**
+     * Method that will delay the system for a specified amount of time.
+     * {@link}  &nbsp;Sleep <a href="https://stackoverflow.com/a/180191">Sleep</a>
+     * @param   levels an integer representing the time to delay in millis
+     */
     private void createLevels(ArrayList<LevelConfig> levels) {
         for (LevelConfig level: levels) {
             ArrayList<Entity> entities = new ArrayList<>();
@@ -54,7 +91,7 @@ public class Game {
                 if (xStart >= screenWidth / 4 * 3 - 1) {
                     // An even number of enemies will lead to a column formation
                     // An uneven number of enemies will lead to a crossed formation
-                    offset = level.getEnemySize() * (level.getEnemyTotal() % 2 == 0 ? 1 : (yStart % 2));
+                    offset = level.getEnemyWidth() * (level.getEnemyTotal() % 2 == 0 ? 1 : (yStart % 2));
                     xStart = screenWidth / 4 + offset;
                     yStart++;
 
@@ -69,12 +106,12 @@ public class Game {
                         offset = level.getEnemyTotal() % 2 == 0 ? 0 : 1 - (yStart % 2);
                         rowTotal -= offset;
                         // Subtract them and add the difference
-                        xStart +=  level.getEnemySize() * (rowTotal - leftovers);
+                        xStart +=  level.getEnemyWidth() * (rowTotal - leftovers);
                     }
                 }
 
-                enemies.add(factory.getEnemy(xStart, yStart, level.getEnemyLives(), level.getEnemySize()));
-                xStart += level.getEnemySize() * 2;
+                enemies.add(factory.getEnemy(xStart, yStart, level.getEnemyLives(), level.getEnemyWidth()));
+                xStart += level.getEnemyWidth() * 2;
             }
             entities.addAll(enemies);
 
@@ -84,7 +121,7 @@ public class Game {
             xStart = screenWidth; yStart = screenHeight / 8; rowTotal = 0;
             while (bosses.size() < level.getBossTotal()) {
                 if (xStart >= screenWidth / 3 * 2) {
-                    offset = level.getBossSize() * (level.getBossTotal() % 2 == 0 ? 1 : (yStart % 2));
+                    offset = level.getBossWidth() * (level.getBossTotal() % 2 == 0 ? 1 : (yStart % 2));
                     xStart = screenWidth / 3 + offset;
                     yStart++;
 
@@ -93,12 +130,12 @@ public class Game {
                         int leftovers = level.getBossTotal() - bosses.size();
                         offset = level.getBossTotal() % 2 == 0 ? 0 : 1 - (yStart % 2);
                         rowTotal -= offset;
-                        xStart += level.getBossSize() * (rowTotal - leftovers);
+                        xStart += level.getBossWidth() * (rowTotal - leftovers);
                     }
                 }
 
-                bosses.add(factory.getBoss(xStart, yStart, level.getBossLives(), level.getBossSize()));
-                xStart += level.getBossSize() * 2;
+                bosses.add(factory.getBoss(xStart, yStart, level.getBossLives(), level.getBossWidth()));
+                xStart += level.getBossWidth() * 2;
             }
             entities.addAll(bosses);
 
@@ -108,7 +145,7 @@ public class Game {
             xStart = screenWidth / 3; yStart = screenHeight * 4 / 6; rowTotal = 0;
             while (walls.size() < level.getWallTotal()) {
                 if (xStart >= screenWidth / 3 * 2) {
-                    offset = level.getWallSize() * (level.getWallTotal() % 2 == 0 ? 1 : (yStart % 2));
+                    offset = level.getWallWidth() * (level.getWallTotal() % 2 == 0 ? 1 : (yStart % 2));
                     xStart = screenWidth / 3 + offset;
                     yStart++;
 
@@ -117,12 +154,12 @@ public class Game {
                         int leftovers = level.getWallTotal() - walls.size();
                         offset = level.getWallTotal() % 2 == 0 ? 0 : 1 - (yStart % 2);
                         rowTotal -= offset;
-                        xStart += level.getWallSize() * (rowTotal - leftovers);
+                        xStart += level.getWallWidth() * (rowTotal - leftovers);
                     }
                 }
 
-                walls.add(factory.getWall(xStart, yStart, level.getWallLives(), level.getWallSize()));
-                xStart += level.getWallSize() * 3;
+                walls.add(factory.getWall(xStart, yStart, level.getWallLives(), level.getWallWidth()));
+                xStart += level.getWallWidth() * 3;
             }
             entities.addAll(walls);
 
@@ -130,7 +167,11 @@ public class Game {
         }
     }
 
-    // https://stackoverflow.com/a/180191
+    /**
+     * Method that will delay the system for a specified amount of time.
+     * {@link}  &nbsp;Sleep <a href="https://stackoverflow.com/a/180191">Sleep</a>
+     * @param   millis an integer representing the time to delay in millis
+     */
     private void sleep(long millis) {
         if (millis <= 0) return;
         try {   // fixed delay
@@ -140,6 +181,13 @@ public class Game {
         }
     }
 
+    /**
+     * Method that will check what type of entity collided with the main entity after a collision.
+     * {@link}  &nbsp;Sleep <a href="https://stackoverflow.com/a/180191">Sleep</a>
+     * @param   comp a LifeComp that represents the main entity
+     * @param   entity a LifeComp that represents the collided entity
+     * @return  a boolean that shows if the collision is valid
+     */
     private boolean checkHits(LifeComp comp, LifeComp entity) {
         boolean bullet1, bullet2;
         /*--------------------------------------------------------------------------------------------------------*/
@@ -231,6 +279,7 @@ public class Game {
         //endregion
     }
 
+    /** Method that will start and run the game. */
     public void Start() {
         // Systems
         MovementSystem mover = new MovementSystem();
@@ -522,5 +571,4 @@ public class Game {
         musicPlayer.stop();
         visualiser.end();
     }
-
 }

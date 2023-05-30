@@ -46,7 +46,7 @@ public class SmartMoveComp extends MovementComp {
     public int getDirection() { return direction; }
     /**
      * Sets the direction of the smart entity.
-     * @param   direction an integer representing a direction (left = -1 & right = 1)
+     * @param   direction an integer representing a direction (left = -1 &amp; right = 1)
      */
     public void setDirection(int direction) { this.direction = direction; }
 }

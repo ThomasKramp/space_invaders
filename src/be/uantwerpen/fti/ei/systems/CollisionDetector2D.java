@@ -6,7 +6,7 @@ import be.uantwerpen.fti.ei.interfaces.ICollisionDetector;
 import java.util.List;
 
 /**
- * Collision detector class that works with 2 extra dimension (component width and height) on top of the x-& y coordinates
+ * Collision detector class that works with 2 extra dimension (component width and height) on top of the x- &amp; y coordinates
  * @see    ICollisionDetector
  */
 public class CollisionDetector2D implements ICollisionDetector {

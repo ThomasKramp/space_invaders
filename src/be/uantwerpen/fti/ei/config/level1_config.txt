@@ -2,14 +2,14 @@
 ## Enemy config
 enemy_total=3
 enemy_lives=5
-enemy_size=1
+enemy_width=1
 
 ## Boss config
 boss_total=0
 boss_lives=10
-boss_size=4
+boss_width=4
 
 ## Wall config
 wall_total=1
 wall_lives=20
-wall_size=3
+wall_width=3

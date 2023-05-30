@@ -19,7 +19,7 @@ abstract public class J2DAVisualiseSystem implements IVisualiseSystem {
 
     /**
      * Class constructor specifying the graphics context.
-     * @param   grCtx graphics context containing all screen variables and settings.
+     * @param   grCtx graphics context that draws and renders all graphical assets.
      * @see     J2DGraphicsContext
      */
     public J2DAVisualiseSystem(J2DGraphicsContext grCtx) { this.grCtx = grCtx; }

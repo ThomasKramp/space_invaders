@@ -3,9 +3,7 @@ package be.uantwerpen.fti.ei.components;
 import be.uantwerpen.fti.ei.dataStruct.PTR;
 import be.uantwerpen.fti.ei.enums.EntityType;
 
-/**
- * Component class to store data containing to the moving an entity and colliding with others
- */
+/** Component class to store data containing to the moving an entity and colliding with others */
 public class MovementComp {
     /**
      * Represents the entity's coordinates.

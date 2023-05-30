@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * Class to manage and play audio files
- * @link <a href="https://www.geeksforgeeks.org/play-audio-file-using-java/">Audio file user</a>
+ * {@link} &nbsp; Audio file user<a href="https://www.geeksforgeeks.org/play-audio-file-using-java/">Audio file user</a>}
  */
 public class AudioPlayer {
     Thread musicThread, effectThread;
